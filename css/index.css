@@ -1,0 +1,90 @@
+body {
+    background-color: white;
+    color: black;
+    font-family: "Times New Roman", serif;
+    text-align: left;
+    font-size: 16px;
+    padding: 10px;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 20px 0;
+}
+
+p {
+    margin: 5px auto;
+    line-height: 1.6;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title-name {
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+.address {
+    margin-bottom: 20px;
+}
+
+.contact {
+    margin-bottom: 20px;
+}
+
+.links {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.box {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.box-section {
+    border: 1px solid #ccc;
+    padding: 15px;
+    flex: 1 1 300px;
+    max-width: 400px;
+}
+.box-section h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.border {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+}
+.footer p {
+    font-size: 14px;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+    max-height: 500px;
+}
