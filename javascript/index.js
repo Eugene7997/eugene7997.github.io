@@ -51,7 +51,7 @@ connectedCallback() {
                 If you have any comments about the web page, you can check out this link:
                 <a href="website_comments.html">Click me!</a>
             </p>
-            <p><i>Last modified: 18/04/2025</i></p>
+            <p><i>Last modified: 14/05/2025</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
