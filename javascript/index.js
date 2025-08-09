@@ -54,7 +54,6 @@ class ShowerThoughts extends HTMLElement {
             "The word \"swims\" is the same upside down.",
             "Why does cheaper restaurants usually require payment upfront, while expensive ones trust you to pay later?",
             "The sun is the lowest on the food chain yet it can defeat any animal.",
-            "After a certain point in the night, shouldn't stoplights just function like stop signs, letting drivers pass without waiting for a green light?",
             "Are Humans are man made?"
         ];
 
