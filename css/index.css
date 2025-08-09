@@ -154,7 +154,7 @@ p {
     line-height: 1.6;
     border-top: 1px solid #f0f0f0;
     text-align: center;
-    height: 80px;
+    min-height: 80px;
 }
 
 .thought-display {
