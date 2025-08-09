@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +8,48 @@
     <link rel="stylesheet" href="./css/index.css">
     <script src="./javascript/index.js"></script>
 </head>
+
 <body>
     <main-header></main-header>
-    <div>
-        <h1 style="text-align: center;">
-            Welcome to my personal profile website!
-        </h1>
-        <p style="text-align: center;">
-            I'm your everyday normal computer science / software engineer guy.
-        </p>
-        <img src="./imgs/profile_picture.jpg" alt="Eugene's profile picture">
+    <div class="hero-section">
+        <div class="hero-container">
+            <div class="profile-container">
+                <img src="./imgs/profile_picture.jpg" alt="Eugene's profile picture">
+                <div class="address">
+                    <h3>📍 Singapore</h3>
+                </div>
+                <div class="contact">
+                    <a class="no-underline" href="mailto:eugene134@protonmail.com"><span>📧</span><span
+                            style="text-decoration: underline;"> eugene134@protonmail.com</span></a><br>
+                    <a class="no-underline" href="https://www.linkedin.com/in/eugene-poh/"><span>💼</span><span
+                            style="text-decoration: underline;"> LinkedIn</span></a><br>
+                    <a class="no-underline" href="https://github.com/Eugene7997"><span>🐙</span><span
+                            style="text-decoration: underline;"> GitHub</span></a>
+                </div>
+                <p style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; margin: 10px 0;">
+                    I'm your everyday normal computer science / software engineer guy.
+                </p>
+            </div>
+        </div>
+        <div class="hero-container">
+            <h1>Hi 👋! I am Eugene.</h1>
+            <h2>Welcome to my digital space!</h1>
+            <p style="color: #555">
+                Here, I share bits of my software journey, projects, and thoughts.
+            </p>
+            <p>
+                I’m into full-stack development with a focus on AI/ML, blending data skills with code to create helpful apps and tools.
+            </p>
+            <h2>What I’m up to</h2>
+            <p>
+                Right now, I’m exploring AI integrations, cloud deployment, and modern CI/CD pipelines.
+            </p>
+            <p>Feel free to reach out to me if you have any questions or opportunities for collaboration on open-source projects!</p>
+            <shower-thoughts></shower-thoughts>
+        </div>
     </div>
+
     <main-footer></main-footer>
 </body>
+
 </html>
