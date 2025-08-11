@@ -5,7 +5,7 @@ body {
     font-family: "Times New Roman", serif;
     text-align: left;
     font-size: 16px;
-    padding: 40px;
+    padding: 20px 40px 40px 40px;
 }
 
 h1 {
@@ -144,9 +144,9 @@ p {
 
 .accordion-content {
     max-height: 0;
-    overflow: hidden;
     transition: max-height 0.3s ease;
     text-align: center;
+    overflow: auto;
 }
 
 .accordion-body {
@@ -263,12 +263,22 @@ p {
 .box-section {
     border: 1px solid #ccc;
     padding: 15px;
+
     flex: 1 1 300px;
     max-width: 400px;
 }
 .box-section h3 {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+.box-section p {
+    margin: 5px 0;
+    line-height: 1.6;
+}
+
+.box-section .paragraph {
+    border-left: 2px solid #626262;
+    padding-left: 12px;
 }
 
 .border {

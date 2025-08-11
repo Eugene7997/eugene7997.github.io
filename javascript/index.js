@@ -38,7 +38,7 @@ connectedCallback() {
     this.innerHTML = `    
     <footer>            
         <div class="footer">
-            <p><i>Last modified: 09/08/2025</i></p>
+            <p><i>Last modified: 11/08/2025</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
