@@ -1,12 +1,53 @@
 /* General */
 body {
-    background-color: white;
-    color: black;
+    background-color: var(--bg);
+    color: var(--text);
     font-family: "Times New Roman", serif;
     text-align: left;
     font-size: 16px;
     padding: 20px 40px 40px 40px;
 }
+
+/* Color theme variables - centralised for easier tweaks */
+:root {
+    --bg: #ffffff; /* page background */
+    --text: #000000; /* main text */
+    --muted: #626262; /* muted text / secondary */
+    --border: #cccccc; /* borders */
+    --header-hamburger-right: 10px;
+    --header-hamburger-size: 40px;
+    --muted-light: #e0e0e0; /* light borders / accents */
+    --panel: #f8f8f8; /* panel background */
+    --panel-hover: #f0f0f0; /* panel hover */
+    --hover-bg: #f5f5f5; /* small hover backgrounds */
+    --dark: #333333; /* darker text for links */
+    --card-bg: #f9f9f9; /* project card bg */
+    --card-hover-bg: #eeeeee; /* project card hover */
+    --muted-2: #888888; /* secondary muted */
+    --focus-outline: #cbd5d9; /* muted focus outline (non-bright) */
+    --dark-card-bg: #0f1724; /* dark mode card bg */
+    --muted-light-2: #cbd5e1; /* muted text in dark mode */
+    --accent: #8b8f92; /* neutral accent tone */
+}
+
+/* Optional manual dark theme toggle: add `class="dark"` to <html> to force dark theme */
+html.dark {
+    --bg: #121212;              /* Main background – neutral dark */
+    --text: #e5e5e5;            /* Primary text – soft white */
+    --muted: #9a9a9a;           /* Muted text – neutral gray */
+    --border: #2b3440;          /* Subtle border – slightly lighter muted for contrast */
+    --muted-light: #1a1a1a;     /* Slightly lighter dark section background */
+    --panel: #181818;           /* Panels or cards */
+    --panel-hover: #202020;     /* Hovered panels */
+    --hover-bg: #202020;        /* Hover background for items */
+    --dark: #f0f0f0;            /* Lightest text or icons */
+    --card-bg: #181818;         /* Card background */
+    --card-hover-bg: #222222;   /* Card hover background */
+    --muted-2: #6f6f6f;         /* Secondary muted text */
+    --focus-outline: #3a3a3a;   /* Outline for focus state */
+    --accent: #a0a0a0;          /* Accent – neutral gray */
+}
+
 
 h1 {
     font-size: 2em;
@@ -35,14 +76,14 @@ p {
 
 .header .links a {
     text-decoration: none;
-    color: black;
+    color: var(--text);
     font-weight: bold;
     font-size: 1.5em;
 }
 
 .header .links a:hover {
     text-decoration: underline;
-    color: #626262;
+    color: var(--muted);
 }
 
 /* Hamburger Menu - Hidden by default */
@@ -51,22 +92,44 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: var(--header-hamburger-size);
+    height: var(--header-hamburger-size);
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
     z-index: 1000;
     position: absolute;
-    right: 10px;
+    right: var(--header-hamburger-right);
     top: 5px;
 }
 
 .hamburger i {
     font-size: 1.8em;
-    color: black;
+    color: var(--text);
     transition: all 0.3s ease;
+}
+
+.theme-toggle {
+    position: absolute;
+    right: calc(var(--header-hamburger-right) + var(--header-hamburger-size) + 8px);
+    top: -5px;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+    background: var(--panel-hover);
+    border-color: var(--border);
+    outline: none;
 }
 
 /* Hero */
@@ -79,7 +142,7 @@ p {
 }
 
 .hero-description {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border);
 }
 
 .hero-container {
@@ -107,7 +170,7 @@ p {
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #e0e0e0;
+    border: 4px solid var(--muted-light);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-top: 0;
@@ -132,16 +195,18 @@ p {
 }
 
 .accordion-item {
-    border: 1px solid #e0e0e0;
+    color: var(--text);
+    border: 1px solid var(--muted-light);
     border-radius: 8px;
     overflow: hidden;
-    background: white;
+    background: var(--bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .accordion-header {
+    color: var(--text);
     width: 100%;
-    background: #f8f8f8;
+    background: var(--panel);
     border: none;
     padding: 15px 20px;
     cursor: pointer;
@@ -154,7 +219,7 @@ p {
 }
 
 .accordion-header:hover {
-    background: #f0f0f0;
+    background: var(--panel-hover);
 }
 
 .accordion-title {
@@ -177,7 +242,7 @@ p {
 .accordion-body {
     padding: 15px 20px;
     line-height: 1.6;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--panel-hover);
     text-align: center;
     min-height: 80px;
 }
@@ -191,6 +256,7 @@ p {
 }
 
 .next-thought-btn {
+    color: var(--text);
     background-color: transparent;
     border: 2px solid;
     padding: 10px 20px;
@@ -203,8 +269,16 @@ p {
 }
 
 .next-thought-btn:hover {
-    background-color: black;
-    color: white;
+    background-color: var(--text);
+    color: var(--bg);
+}
+
+@media (max-width: 1100px) {
+    .theme-toggle {
+        position: absolute;
+        top: 4rem;
+        right: 0.05rem;
+    }
 }
 
 /* Responsive Design - for smaller screens */
@@ -242,14 +316,22 @@ p {
         display: flex;
     }
 
+    .theme-toggle {
+        position: absolute;
+        right: calc(var(--header-hamburger-right) + var(--header-hamburger-size) + 8px);
+        top: 5px;
+        margin-left: 0;
+        pointer-events: auto;
+    }
+
     .header .links {
         position: absolute;
         top: 50px;
         right: 0;
         left: 0;
         flex-direction: column;
-        background-color: white;
-        border: 1px solid #ccc;
+        background-color: var(--bg);
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 10px 0;
         gap: 0;
@@ -273,7 +355,7 @@ p {
         font-size: 1.2em;
         padding: 12px 20px;
         text-align: center;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid var(--border);
         transition: background-color 0.2s ease;
     }
 
@@ -282,7 +364,7 @@ p {
     }
 
     .header .links a:hover {
-        background-color: #f5f5f5;
+        background-color: var(--hover-bg);
         text-decoration: none;
     }
 
@@ -336,7 +418,7 @@ p {
 }
 
 .box-section {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border);
     padding: 15px;
 
     flex: 1 1 300px;
@@ -354,12 +436,12 @@ p {
 }
 
 .box-section .paragraph {
-    border-left: 2px solid #626262;
+    border-left: 2px solid var(--muted);
     padding-left: 12px;
 }
 
 .border {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--border);
     padding-top: 20px;
 }
 
@@ -369,7 +451,7 @@ p {
 }
 
 .background-links a {
-    color: #333;
+    color: var(--dark);
     text-decoration: underline;
 }
 
@@ -379,8 +461,8 @@ p {
 }
 
 .background-links a:hover {
-    color: #ffffff;
-    background: #333;
+    color: var(--bg);
+    background: var(--dark);
     text-decoration: underline;
     border-radius: 4px;
     padding: 0.3rem;
@@ -388,7 +470,7 @@ p {
 
 .background-links .sep {
     margin: 0 0.5rem;
-    color: #888;
+    color: var(--muted-2);
 }
 
 /* Footer */
@@ -396,7 +478,7 @@ p {
     text-align: center;
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--border);
 }
 
 .footer p {
@@ -413,13 +495,13 @@ p {
 }
 
 .contact-links a {
-    color: #333;
+    color: var(--dark);
     text-decoration: underline;
 }
 
 .contact-links a:hover {
-    color: #ffffff;
-    background: #333;
+    color: var(--bg);
+    background: var(--dark);
     text-decoration: underline;
     border-radius: 4px;
     padding: 0.2rem;
@@ -439,8 +521,8 @@ p {
 }
 
 .project-card {
-    background: #f9f9f9;
-    border: 1px solid #f9f9f9;
+    background: var(--card-bg);
+    border: 1px solid var(--card-bg);
     border-radius: 10px;
     padding: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -448,8 +530,8 @@ p {
 }
 
 .project-card:hover {
-    background: #eeeeee;
-    border: 2px solid #ccc;
+    background: var(--card-hover-bg);
+    border: 2px solid var(--border);
     transform: translateY(-4px);
 }
 
@@ -479,6 +561,18 @@ p {
     text-align: left;
 }
 
+/* Ensure project summary text follows the color theme tokens */
+.project-summary,
+.project-summary p {
+    color: var(--text);
+}
+
+/* Project description and tech lines should be slightly muted */
+.project-desc,
+.project-tech {
+    color: var(--muted);
+}
+
 .project-title {
     margin: 10px 0 5px 0;
     font-size: 1.15rem;
@@ -497,13 +591,13 @@ p {
     margin-top: 2rem;
     text-align: center;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--dark);
     text-decoration: underline;
 }
 
 .project-links a:hover {
-    color: #ffffff;
-    background: #333;
+    color: var(--bg);
+    background: var(--dark);
     text-decoration: underline;
     border-radius: 4px;
     padding: 0.3rem;
@@ -511,23 +605,7 @@ p {
 
 .project-links .sep {
     margin: 0 0.5rem;
-    color: #888;
-}
-
-@media (prefers-color-scheme: dark) {
-    .project-card {
-        background: #0f1724;
-        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
-    }
-
-    .project-desc,
-    .project-tech {
-        color: #cbd5e1;
-    }
-
-    .project-links a {
-        color: #7fb4ff;
-    }
+    color: var(--muted-2);
 }
 
 /* Linkable project card accessibility and detail page styles */
@@ -538,7 +616,7 @@ p {
 }
 
 .project-link:focus {
-    outline: 3px solid #bde0ff;
+    outline: 3px solid var(--focus-outline);
     outline-offset: 3px;
 }
 
@@ -551,7 +629,7 @@ p {
 .project-detail .back-link {
     display: inline-block;
     margin-bottom: 1rem;
-    color: #333;
+    color: var(--dark);
     text-decoration: none;
 }
 
@@ -610,29 +688,29 @@ p {
 .btn {
     display: inline-block;
     padding: 0.5rem 0.9rem;
-    background-color: black;
-    color: white;
+    background-color: var(--text);
+    color: var(--bg);
     text-decoration: none;
-    border: 1px solid black;
+    border: 1px solid var(--text);
     border-radius: 6px;
 }
 
 .btn:hover {
-    background: white;
-    border: 1px solid black;
-    color: black;
+    background: var(--bg);
+    border: 1px solid var(--text);
+    color: var(--text);
 }
 
 .btn.ghost {
     background: transparent;
-    color: black;
-    border: 1px solid black;
+    color: var(--text);
+    border: 1px solid var(--text);
     margin-left: 0.5rem;
 }
 
 .btn.ghost:hover {
-    background: black;
-    color: white;
+    background: var(--text);
+    color: var(--bg);
 }
 
 .detail-hero video {
@@ -666,4 +744,36 @@ p {
     height: auto;
     border-radius: 8px;
     display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0d0d0d;
+        --text: #f2f2f2; 
+        --muted: #a0a0a0;
+        --border: #2a2a2a;
+        --muted-light: #161616;
+        --panel: #3e3e3e;
+        --panel-hover: #1c1c1c;
+        --hover-bg: #1c1c1c;
+        --dark: #ffffff;
+        --card-bg: #3e3e3e;
+        --card-hover-bg: #1f1f1f;
+        --muted-2: #7a7a7a;
+        --focus-outline: #3d3d3d;
+        --accent: #bfbfbf;
+    }
+
+    .project-card {
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
+    }
+
+    .project-desc,
+    .project-tech {
+        color: var(--muted-light);
+    }
+
+    .project-links a {
+        color: var(--accent);
+    }
 }

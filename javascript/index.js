@@ -32,6 +32,7 @@ class Header extends HTMLElement {
                     <a href="${prefix}projects.html">Projects</a>&nbsp;
                     <a href="${prefix}blogs.html">Blogs</a>
                 </div>
+                <button class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">☾</button>
             </div>
             <div class="border" />
         </nav>
@@ -41,6 +42,49 @@ class Header extends HTMLElement {
         const hamburger = this.querySelector('.hamburger');
         const hamburgerIcon = this.querySelector('.hamburger i');
         const links = this.querySelector('.links');
+        const themeToggle = this.querySelector('.theme-toggle');
+
+        // Theme toggle: persists to localStorage and updates `html` class
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                if (themeToggle) {
+                    themeToggle.textContent = '☀';
+                    themeToggle.setAttribute('aria-pressed', 'true');
+                }
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (themeToggle) {
+                    themeToggle.textContent = '☾';
+                    themeToggle.setAttribute('aria-pressed', 'false');
+                }
+            }
+        }
+
+        // Initialize theme from localStorage or prefers-color-scheme
+        try {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                applyTheme(true);
+            } else if (saved === 'light') {
+                applyTheme(false);
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(prefersDark);
+            }
+        } catch (e) {
+            // localStorage may be unavailable; fall back to prefers-color-scheme
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark);
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+                applyTheme(isDark);
+            });
+        }
 
         hamburger.addEventListener('click', () => {
             const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
