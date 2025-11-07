@@ -172,6 +172,14 @@ function initGame() {
     ctx = canvas.getContext('2d');
     scoreElement = document.getElementById('score');
 
+    function resizeCanvasForDisplay() {
+        canvas.style.width = '100%';
+        canvas.style.height = 'auto';
+    }
+
+    resizeCanvasForDisplay();
+    window.addEventListener('resize', resizeCanvasForDisplay);
+
     document.addEventListener('keydown', (e) => {
         if (e.code === 'Space') {
             e.preventDefault();
@@ -187,19 +195,33 @@ function initGame() {
         }
     });
 
+    // Pointer / touch support: tapping the canvas starts/jumps/restarts depending on state
+    canvas.addEventListener('pointerdown', (e) => {
+        // prevent default so touch doesn't also trigger scroll/zoom
+        e.preventDefault();
+        if (!gameStarted && !isGameOver) {
+            gameStarted = true;
+        }
+        else if (isGameOver) {
+            resetGame();
+        }
+        else {
+            jump();
+        }
+    });
+
     gameLoop();
 }
 
 class DinoGame extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-            <div id="game-container" style="max-width: 600px; margin: 20px auto;">
-                <canvas id="game" width="600" height="150" style="border: 1px solid #535353; background-color: #f7f7f7;"></canvas>
+            <div id="game-container" style="max-width: 600px; margin: 20px auto; position:relative;">
+                <canvas id="game" width="600" height="150" style="border: 1px solid #535353; background-color: #f7f7f7; display:block; width:100%; height:auto; touch-action:none;"></canvas>
                 <p id="score" style="text-align: center; font-size: 18px; margin-top: 10px;">Score: 0</p>
             </div>
         `;
 
-        // Initialize game after elements are created
         initGame();
     }
 }
