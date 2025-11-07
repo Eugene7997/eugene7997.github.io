@@ -20,8 +20,11 @@ class Header extends HTMLElement {
         const path = window.location.pathname.replace(/\\/g, '/');
         const prefix = ['/projects/', '/blogs/'].some(p => path.includes(p)) ? '../' : '';
         this.innerHTML = `
-        <nav>            
+        <nav>
             <div class="header">
+                <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                    <i class="fa fa-bars"></i>
+                </button>
                 <div class="links">
                     <a href="${prefix}index.html">Home</a>&nbsp;
                     <a href="${prefix}background.html">Background</a>&nbsp;
@@ -33,6 +36,47 @@ class Header extends HTMLElement {
             <div class="border" />
         </nav>
       `;
+
+        // Hamburger menu toggle functionality
+        const hamburger = this.querySelector('.hamburger');
+        const hamburgerIcon = this.querySelector('.hamburger i');
+        const links = this.querySelector('.links');
+
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            links.classList.toggle('active');
+            
+            // Toggle between bars and times icon
+            if (hamburgerIcon.classList.contains('fa-bars')) {
+                hamburgerIcon.classList.remove('fa-bars');
+                hamburgerIcon.classList.add('fa-times');
+            } else {
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when a link is clicked
+        const menuLinks = this.querySelectorAll('.links a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                links.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.contains(e.target)) {
+                links.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        });
     }
 }
 
