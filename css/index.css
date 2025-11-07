@@ -514,12 +514,6 @@ p {
     color: #888;
 }
 
-@media (max-width: 600px) {
-    .project-card {
-        min-width: 90%;
-    }
-}
-
 @media (prefers-color-scheme: dark) {
     .project-card {
         background: #0f1724;
@@ -639,12 +633,6 @@ p {
 .btn.ghost:hover {
     background: black;
     color: white;
-}
-
-@media (max-width: 480px) {
-    .project-detail {
-        padding: 0 10px;
-    }
 }
 
 .detail-hero video {
