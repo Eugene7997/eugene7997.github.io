@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Projects - ResumATE</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../javascript/index.js"></script>
+</head>
+
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>ResumATE</h1>
+        <p class="lead">AI-powered resume optimization platform that transforms the tedious process of tailoring
+            resumes into a streamlined, intelligent workflow. Built in 24 hours at Cursor's first official hackathon in
+            Singapore.</p>
+
+        <section class="detail-hero">
+            <img src="../imgs/cursor_hackathon2.png" alt="ResumATE application interface">
+        </section>
+
+        <section class="detail-body">
+            <h2>Overview</h2>
+            <p>
+                We participated in
+                <a href="https://www.straitstimes.com/tech/programmers-assemble-400-compete-in-24-hour-hackathon-by-ai-firms-like-cursor-openai"
+                    target="_blank" rel="noopener">
+                    Cursor's first official 24-hour hackathon in Singapore, 2025
+                </a>
+                alongside 400 programmers to create ResumATE, a web application designed to solve the painful process
+                of tailoring resumes for job applications.
+            </p>
+            <p>
+                ResumATE addresses a universal problem for job seekers: maintaining a master resume with all
+                experiences, then painstakingly curating relevant points for each job application. This manual process
+                can consume hours when applying to multiple positions, leading to burnout and reduced application
+                quality.
+            </p>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/malcolmling97/ResumATE" target="_blank" rel="noopener">
+                    View source on GitHub
+                </a>
+                <a class="btn ghost" href="" data-focus-target="#resumate-video">
+                    Video demo
+                </a>
+            </p>
+
+            <div>
+                <h3>Features</h3>
+                <ul>
+                    <li><strong>Google OAuth 2.0 Authentication:</strong> Secure, frictionless user onboarding with
+                        Google Single Sign-On integration using Passport.js.</li>
+                    <li><strong>Master Resume Management:</strong> Centralized repository for all work experiences,
+                        projects, achievements, education, and skills with full CRUD operations.</li>
+                    <li><strong>Intelligent Resume Generation:</strong> AI-powered selection and reorganization of
+                        experiences based on job descriptions using OpenAI Agents SDK with GPT-4.</li>
+                    <li><strong>Smart Bullet Point Generation:</strong> Context-aware AI that generates tailored,
+                        metric-driven bullet points matching job requirements while avoiding duplication.</li>
+                    <li><strong>Real-time Resume Editor:</strong> Intuitive inline editing interface with instant
+                        preview, allowing users to tweak AI-generated content before finalizing.</li>
+                    <li><strong>Resume Analysis & Feedback:</strong> AI analyzer that scores resumes (0-100) across
+                        skills match, experience relevance, bullet quality, and presentation, with actionable
+                        improvement suggestions.</li>
+                    <li><strong>Version History:</strong> Access to previously curated resumes for different job
+                        applications with searchable archive.</li>
+                </ul>
+
+                <h3>Tech stack</h3>
+                <p>
+                    <strong>Frontend:</strong> React 19.1 • Vite 7 • TailwindCSS 4 • ShadCN UI • Radix UI • Lucide
+                    Icons • Zustand (State Management) • React Router 7<br>
+                    <strong>Backend (Node.js):</strong> Express 5 • Passport.js (Google OAuth) • JWT • Bcrypt<br>
+                    <strong>Backend (Python):</strong> FastAPI • OpenAI Agents SDK • Pydantic • Uvicorn<br>
+                    <strong>Database:</strong> PostgreSQL (Supabase)<br>
+                    <strong>AI/ML:</strong> OpenAI GPT-4 • Fal.ai
+                </p>
+            </div>
+
+            <h2>Problem Statement</h2>
+            <p>
+                Job seekers typically maintain a comprehensive master resume containing their entire professional
+                history. For each job application, they must manually:
+            </p>
+            <ul>
+                <li>Review the job description to identify relevant skills and experiences</li>
+                <li>Select which experiences to highlight from their master resume</li>
+                <li>Rewrite bullet points to emphasize job-specific requirements</li>
+                <li>Ensure bullet points include quantifiable metrics and action verbs</li>
+                <li>Format and export the tailored resume</li>
+            </ul>
+            <p>
+                This process is time-consuming (30-60 minutes per application), mentally exhausting, and inconsistent in
+                quality. When applying to dozens of jobs, this becomes a significant bottleneck that reduces both the
+                quantity and quality of applications.
+            </p>
+
+            <h2>Solution</h2>
+            <p>
+                ResumATE transforms resume tailoring from a manual, hours-long process into an AI-assisted workflow that
+                takes minutes. The platform uses a dual-backend architecture to deliver intelligent resume
+                optimization while maintaining user control over the final output.
+            </p>
+
+            <span>Dual-Backend Architecture</span>
+            <p>
+                ResumATE employs a strategic split between Node.js and Python backends, each optimized for its specific
+                domain. The <strong>Express backend</strong> handles all traditional web server concerns: user
+                authentication via Google OAuth with Passport.js, session management with JWT tokens, and CRUD
+                operations for resume data against PostgreSQL. This backend manages the stateful aspects of the
+                application, maintaining user sessions and ensuring secure access to personal resume data.
+            </p>
+            <p>
+                The <strong>FastAPI backend</strong> serves as a specialized AI microservice, completely isolated from
+                authentication concerns. It focuses exclusively on resume intelligence: generating context-aware bullet
+                points, analyzing resume-job fit, and orchestrating complex AI agent workflows using OpenAI's GPT-4. By
+                separating AI operations into Python, we leverage its superior ecosystem for machine learning
+                (<code>openai</code>, <code>pydantic</code> for data validation) while keeping authentication logic in
+                Node.js where tools like Passport.js are mature and well-documented.
+            </p>
+            <p>
+                This separation follows microservices principles: the Node backend can scale independently to handle
+                authentication load, while the Python backend can be optimized (or even replaced) for AI performance
+                without affecting user sessions. Communication happens via internal HTTP APIs, with the Express backend
+                acting as a gateway that validates users before proxying AI requests to FastAPI.
+            </p>
+
+            <span>Intelligent Resume Optimization</span>
+            <p>
+                At the core of ResumATE is an AI pipeline built on the <strong>OpenAI Agents SDK</strong> with GPT-4. 
+                The system uses the Agents SDK to create agent instances with configurable parameters (model, temperature, 
+                tools) for each API call. When a user submits a job description, the system doesn't just generate generic 
+                content, it performs contextual analysis using carefully engineered prompts.
+            </p>
+            <p>
+                The <code>generate_full_resume_with_single_call</code> function demonstrates this intelligence. Instead
+                of making multiple AI calls (which would be slow and expensive), a single, carefully crafted prompt
+                provides the AI with the user's complete master resume data: all experiences, projects, skills, and
+                existing bullet points. The AI then makes strategic decisions:
+            </p>
+            <ul>
+                <li><strong>Skill Selection:</strong> Analyzes the job description to select only relevant skills from
+                    the user's master list, avoiding the common mistake of listing every skill regardless of relevance.
+                    Includes strict validation to prevent AI hallucination e.g. skills not in the database are rejected.</li>
+                <li><strong>Experience Prioritization:</strong> Ranks experiences by relevance score, selecting the top
+                    2-3 that best match the target role. An experienced Python developer applying to a Python role won't
+                    have their unrelated Java internship featured.</li>
+                <li><strong>Bullet Point Generation:</strong> Creates 3-4 bullet points per experience, each following a
+                    specific formula: <code>[Action verb] + [what you built] + using [relevant tech] + [metric/number]
+                    + [impact]</code>. The AI is instructed to prioritize technologies mentioned in the job description
+                    and include quantifiable metrics (users served, time saved, performance improvements).</li>
+            </ul>
+            <p>
+                The system includes built-in quality controls. Each agent instance is created with tuned temperature 
+                settings (0.3 for analysis tasks, 0.5 for generation tasks) to balance creativity with consistency. 
+                The AI is explicitly instructed to avoid vague statements like "Developed applications using various 
+                technologies" in favor of specific, impactful bullets like "Built full-stack API using Python/FastAPI 
+                and PostgreSQL serving 10K+ users."
+            </p>
+
+            <span>Context-Aware Point Generation</span>
+            <p>
+                ResumATE's bullet point generation goes beyond simple templating. The
+                <code>generate_pointer_chunks_with_context</code> function demonstrates sophisticated context awareness.
+                When generating bullet points for a specific experience, the AI receives:
+            </p>
+            <ul>
+                <li>The experience's complete details (title, organization, dates, description)</li>
+                <li>All existing bullet points for that experience (to avoid duplication)</li>
+                <li>Bullet points from other experiences (to understand the candidate's broader capabilities)</li>
+                <li>The target job description (to tailor wording and emphasis)</li>
+            </ul>
+            <p>
+                This context enables intelligent variation. If you already have a bullet about "database optimization,"
+                the AI won't generate another one but instead it will focus on different aspects like API development or deployment
+                automation. Each bullet point is distinct, relevant, and additive to the overall narrative.
+            </p>
+
+            <span>Resume Analysis & Feedback</span>
+            <p>
+                The <code>analyze_resume_relevancy</code> function provides objective, actionable feedback. It scores
+                resumes across four dimensions: skills match (40 points), experience relevance (30 points), bullet
+                quality (20 points), and overall presentation (10 points). The AI explains its scoring: "Strong Python
+                and FastAPI experience matches job requirements" (strength) versus "Missing AWS experience mentioned in
+                job description" (weakness).
+            </p>
+            <p>
+                Crucially, it provides 2 to 3 specific improvement suggestions: "Add AWS cloud experience to skills and
+                highlight in projects" or "Add metrics to all bullet points (users served, time saved, etc.)." This
+                transforms the AI from a generator into a coach, teaching users how to improve their resumes over time.
+            </p>
+
+            <span>Database Schema Design</span>
+            <p>
+                ResumATE's PostgreSQL schema reflects its dual nature: preserving user's original data while enabling AI
+                optimization. The <code>master_resume_items</code> table stores the user's complete professional
+                history that is never modified by AI. Each item (experience or project) links to
+                <code>master_resume_item_points</code>, tracking individual bullet points with <code>usage_count</code>
+                to identify which points are most frequently selected across tailored resumes.
+            </p>
+            <p>
+                When a user generates a tailored resume, the system creates entries in
+                <code>curated_resumes</code> (linked to a specific job) with junction tables
+                (<code>curated_resume_items_junction</code>) that reference which master items were selected. The
+                AI-generated bullet points are stored separately in <code>curated_resume_item_points</code>, preserving
+                both the original master data and the AI-optimized variations. This design enables version history,
+                analytics on which experiences are most valuable, and the ability to regenerate resumes without losing
+                original data.
+            </p>
+
+            <span>User Experience Flow</span>
+            <p>
+                ResumATE's interface is designed for speed and control. Users start on the <strong>Master Resume
+                    Page</strong>, where they manage their professional inventory using a tabbed interface (Work
+                Experience, Projects, Achievements, Education, Skills). Each section supports inline editing with
+                expandable cards showing bullet points, dates, and descriptions.
+            </p>
+            <p>
+                When ready to apply for a job, users navigate to the <strong>Resume Tailor Page</strong>. They paste
+                the job description into a text area and click "Generate Resume." Within seconds, the AI returns a
+                tailored resume in the <strong>Resume Editor</strong> which is a live preview showing contact info, skills,
+                experiences, projects, and education. Each section is editable: users can add/remove skills, reorder
+                experiences, edit bullet points inline, or regenerate specific sections if they're not satisfied.
+            </p>
+            <p>
+                The sidebar maintains a searchable history of past resumes, allowing users to quickly reference or
+                duplicate previous applications. When satisfied, users click "Save Resume" to persist the tailored
+                version to the database, or "Export PDF" to download a professionally formatted document for submission
+                (not implemented in hackathon).
+            </p>
+
+            <h2>Challenges Faced</h2>
+
+            <span>Defining Product Scope Under Time Pressure</span>
+            <p>
+                With only 24 hours, every feature decision was a trade off. We initially envisioned comprehensive
+                features like LinkedIn integration, cover letter generation, and advanced analytics. The challenge was
+                ruthlessly prioritizing: What's the <em>minimum viable product</em> that delivers real value? We
+                converged on the core loop. Master resume → job description → tailored resume. We cut everything that
+                did not directly serve that flow. This meant deferring "nice-to-have" features like visual resume themes
+                and focusing on making the AI generation rock solid.
+            </p>
+
+            <span>AI Prompt Engineering & Quality Control</span>
+            <p>
+                Getting consistent, high quality output from GPT-4 required extensive prompt iteration. Early versions
+                generated vague bullets like "Worked on backend development" despite having rich context. We learned
+                that AI needs <em>explicit constraints</em>: "Include numbers/metrics when possible," "Use specific tech
+                stacks (Python/FastAPI, Docker, AWS)," "Show concrete impact." We also discovered the AI would
+                hallucinate skills not in the database, requiring strict post processing validation to filter invented
+                content. Temperature tuning (0.3 for analysis, 0.5 for generation) was critical to balance creativity
+                with reliability.
+            </p>
+
+            <span>Database Schema Evolution</span>
+            <p>
+                Our initial schema was too simple, treating all resume items as generic "experiences" without
+                distinguishing work from projects or achievements. As we progressed, we realised this would not support the
+                nuanced presentation needed for quality resumes. Refactoring the schema during a hackathon is risky and costly, 
+                but we made the call to implement the hybrid schema (<code>master_resume_items</code> with
+                <code>item_type</code> enum) to support proper categorization. This paid off in the final product but
+                cost us hours of migration and code updates.
+            </p>
+
+            <span>Dual-Backend Coordination</span>
+            <p>
+                Running two backends (Express on port 3000, FastAPI on port 8000) introduced complexity. The Express
+                backend needed to proxy AI requests to FastAPI while maintaining user sessions. CORS issues due to cross
+                domains affected us in the end, causing us to miss the submission deadline.
+            </p>
+
+            <span>State Management Complexity</span>
+            <p>
+                Managing state across the resume editing workflow was non-trivial. The <code>useResumes</code> hook grew
+                to over 300 lines, managing selected resume, loading states, error handling, and synchronization between
+                local edits and database saves. React's re-render behavior caused subtle bugs e.g. editing a bullet point
+                would sometimes trigger a re-fetch, losing unsaved changes. We implemented optimistic updates (update
+                local state immediately, sync to backend in background) to maintain responsiveness, but this required
+                careful rollback logic when API calls failed.
+            </p>
+
+            <span>Team Coordination & Communication</span>
+            <p>
+                With three developers working in parallel, merge conflicts were inevitable. We divided work by roles 
+                (frontend, backend, AI) but found our components had more interdependencies than expected. 
+                One developer's changes to the resume data structure would break another's editor component. 
+            </p>
+
+            <span>Physical & Mental Endurance</span>
+            <p>
+                Coding continuously for 24 hours is physically demanding. Focus degrades significantly after hour 16, we
+                began making several silly bugs (typos in variable names, forgetting to await async functions) that would have
+                been obvious when fresh. The 2 AM to 6 AM stretch was more brutal than I anticipated and it was at razor's edge
+                whether we could finish.
+            </p>
+
+            <h2>Lessons Learned</h2>
+
+            <span>Product-First Mindset: Vision Before Code</span>
+            <p>
+                The most impactful lesson was adopting a product-first approach from the start. Instead of jumping
+                straight into coding, we should have spent a lot more hours whiteboarding the end-to-end user journey: Who is our
+                user? (job seekers who apply to multiple positions) What pain are we solving? (time-consuming manual
+                resume tailoring) What does success look like? (generating a tailored resume in &lt;5 minutes).
+            </p>
+            <p>
+                This clarity could have prevented scope creep and gave a very focused vision. 
+                When someone suggested adding a "resume scoring dashboard," we could quickly ask: Does this serve our core value proposition? 
+                The answer was no nice-to-have, but not essential for MVP. <strong>A clear product vision is a forcing function for good technical
+                decisions.</strong> It tells you what to build, what to defer, and what to cut entirely.
+            </p>
+            <p>
+                Working backward from the desired outcome could also shape our architecture. Knowing we wanted instant resume
+                editing led us to implement optimistic updates in the frontend. Knowing we wanted context-aware bullet
+                points drove the decision to pass complete user history to the AI rather than just the target experience.
+                Product requirements drive technical requirements, not the other way around.
+            </p>
+
+            <span>AI is a Tool, Not Magic: Prompt Engineering Matters</span>
+            <p>
+                We learned that integrating AI effectively requires treating it like any other component: understanding
+                its capabilities, limitations, and failure modes. GPT-4 is powerful but not magical. It will produce
+                mediocre output if given mediocre instructions. The OpenAI Agents SDK provides a convenient wrapper for 
+                managing API calls, but the real intelligence comes from prompt engineering. The difference between 
+                "Generate bullet points for this experience" and our final prompt (which explicitly defines bullet 
+                structure, emphasizes metrics, provides examples, and includes existing context to avoid duplication) 
+                is night and day.
+            </p>
+            <p>
+                <strong>Good prompts are specific, constrained, and include examples.</strong> Saying "include metrics"
+                is vague; showing "Built full stack API using Python/FastAPI serving 10K+ users" versus "Developed
+                applications" teaches the AI what you want. We also learned to validate AI output programmatically. Our
+                skill hallucination problem was solved by checking generated skills against the database whitelist, not
+                by hoping the AI would not hallucinate.
+            </p>
+            <p>
+                Temperature tuning was another revelation. High temperature (0.7+) generates creative but inconsistent
+                output. Low temperature (0.2) is reliable but robotic. We use 0.3 for analysis (where consistency is
+                critical) and 0.5 for bullet generation (where some creativity helps). This nuance in treating different AI
+                tasks differently is something you only learn through experimentation.
+            </p>
+
+            <span>Database Design Impacts Everything</span>
+            <p>
+                Our mid-hackathon schema refactor was painful but necessary. The initial design (a flat
+                <code>resume_items</code> table) seemed sufficient until we tried to implement the editor. Suddenly we
+                needed to distinguish work experiences from projects from achievements, each with different fields and
+                presentation. The refactor to a hybrid schema with <code>item_type</code> enum enabled proper
+                categorization while maintaining a single source of truth.
+            </p>
+            <p>
+                <strong>Good schema design anticipates future needs.</strong> If we had spent more time upfront modeling
+                the domain (What types of resume items exist? How do they relate? What fields are shared vs.
+                specialized?), we could have avoided the refactor. The lesson: invest in data modeling early. Your
+                database schema is your application's foundation. Getting it right prevents compound friction later.
+            </p>
+            <p>
+                We also learned the value of normalization. Storing bullet points in a separate
+                <code>master_resume_item_points</code> table (rather than as a JSON array in <code>master_resume_items</code>)
+                enabled powerful features like tracking <code>usage_count</code> per bullet and supporting multiple
+                curated resumes referencing the same master points. Proper relational modeling unlocks functionality you
+                don't realize you need until you need it.
+            </p>
+
+            <span>Microservices Bring Complexity: Only Split When Necessary</span>
+            <p>
+                Our dual-backend architecture (Express + FastAPI) was the right call for this project, but it came with
+                costs: coordinating deployments, managing two codebases, debugging cross-service issues. We chose this
+                split because (1) Passport.js for OAuth is mature in Node, and (2) Python's AI ecosystem (<code>openai</code>
+                SDK, <code>pydantic</code>) is superior to Node alternatives.
+            </p>
+            <p>
+                <strong>The lesson: only introduce microservices when there is a compelling reason.</strong> If we could
+                have done everything in Node, we would have single codebase, single deployment, simpler debugging. But
+                the trade off was worth it: Express handles authentication complexity elegantly, while FastAPI provides
+                type-safe, well-documented AI endpoints. Each backend plays to its language's strengths.
+            </p>
+            <p>
+                The key insight is <em>intentional separation</em>. Our Express backend knows nothing about AI
+                agents, it just proxies requests to <code>http://localhost:8000/api/...</code>. Our FastAPI backend knows
+                nothing about users or sessions, it receives data and returns AI-generated content. This clean interface
+                boundary means we could swap out either backend independently (e.g., replace FastAPI with a different AI
+                service) without affecting the other. Coupling would have made this impossible.
+            </p>
+
+            <span>State Management Requires Discipline</span>
+            <p>
+                React's state management can spiral out of control quickly. Our <code>useResumes</code> hook became a
+                all-encompassing Object managing resumes list, selected resume, loading states, error handling, CRUD operations, and
+                API synchronization. This worked for the hackathon but is not sustainable for a production app.
+            </p>
+            <p>
+                We also learned the value of immutable updates. Mutating state directly (<code>resume.experiences.push(newExp)</code>)
+                caused React to miss changes and skip re-renders. Using spread operators (<code>{ ...resume,
+                experiences: [...resume.experiences, newExp] }</code>) ensured React detected updates. This is
+                JavaScript 101, but under time pressure and fatigue, we made these mistakes and paid the debugging cost.
+                Discipline in state updates saves hours of confusion.
+            </p>
+
+            <span>Cursor & AI-Assisted Development</span>
+            <p>
+                Competing in a Cursor-sponsored hackathon gave us hands-on experience with AI-assisted coding. Cursor's
+                autocomplete and chat features accelerated boilerplate generation (API routes, database queries,
+                component scaffolding) significantly. Where we would normally spend 10 minutes writing a CRUD endpoint, 
+                Cursor generated it in 30 seconds. This multiplicative effect added up and we estimate AI tools saved us 
+                4-6 hours of typing over the 24-hour period.
+            </p>
+            <p>
+                However, AI-generated code requires vigilance. Cursor occasionally suggested plausible-but-wrong
+                patterns (e.g., accessing state properties that did not exist, or generating overly complicated UI). 
+                <strong>The lesson: treat AI suggestions like junior developer contributions i.e. always verify and 
+                understand before accepting.</strong> The speed gain is real, but it doesn't eliminate the need for 
+                understanding what the code does.
+            </p>
+            <p>
+                We also discovered effective prompt strategies for Cursor. Vague requests like "add error handling" 
+                produced generic try-catch blocks. Specific requests like "add error handling with user-friendly 
+                messages and rollback on failure" produced much better code. The same prompt engineering principles 
+                that apply to GPT-4 apply to coding assistants specificity gets better results.
+            </p>
+
+            <span>Communication Under Pressure</span>
+            <p>
+                Time-constrained collaboration requires intentional communication. Early on, we had a problem:
+                developers would finish their tasks and start on new ones without telling anyone, leading to duplicate
+                work and conflicts. We should have instituted a simple rule: before starting any new feature, announce 
+                it in the group chat and wait for acknowledgment. This 30-second overhead could have prevented hours of 
+                wasted effort.
+            </p>
+            <p>
+                <strong>Active listening is critical.</strong> When someone explains their approach, repeat it back to
+                confirm understanding e.g. "So you are storing bullet points in a separate table with
+                <code>resume_item_id</code> foreign keys?" This catches misunderstandings immediately. We had several
+                instances where someone said "yes" to a proposal without actually understanding it, leading to
+                implementation mismatches later. Confirmation loops are worth the time.
+            </p>
+            <p>
+                We also learned the value of synchronous check-ins. Every 4 hours, we would stop coding for 15 minutes and
+                gather: What did everyone accomplish? Are there any blockers? Do interfaces match expectations? These
+                sessions caught integration issues early (e.g., frontend expecting <code>camelCase</code> while backend
+                returned <code>snake_case</code>) before they became merge-conflict nightmares.
+            </p>
+
+            <h2>Results</h2>
+            <p>
+                The final ResumATE application successfully delivers on its core promise: transforming the 30-60 minute
+                process of tailoring a resume into a sub-5-minute workflow. Users can now maintain a comprehensive
+                master resume and generate high-quality, job-specific resumes on demand, with AI handling the heavy
+                lifting of content selection and bullet point optimization.
+            </p>
+
+            <span>Key Achievements</span>
+            <ul>
+                <li><strong>End-to-End Workflow:</strong> Complete user journey from Google sign-in → master resume
+                    management → job-specific generation → inline editing → PDF export (not implemented).
+                </li>
+                <li><strong>AI Quality:</strong> GPT-4 integration produces contextually relevant, metric-driven bullet
+                    points that match job descriptions while avoiding generic fluff. Validation systems prevent skill
+                    hallucination.
+                </li>
+                <li><strong>Performance:</strong> Full resume generation completes in 10-15 seconds via single,
+                    optimized AI call rather than sequential requests. Responsive UI with optimistic updates maintains
+                    perception of speed.
+                </li>
+                <li><strong>Data Integrity:</strong> Hybrid database schema preserves user's original master data while
+                    supporting unlimited tailored variations. Version history enables resume reuse and analytics.</li>
+                <li><strong>User Experience:</strong> Intuitive interface with tabbed master resume management,
+                    real-time editor with inline editing, and searchable resume history. No tutorial needed. Flow is
+                    self-evident.
+                </li>
+                <li><strong>Architecture:</strong> Clean microservices separation between Express (auth, CRUD) and
+                    FastAPI (AI) enables independent scaling and maintenance. Well-documented API contracts facilitate
+                    team collaboration.
+                </li>
+            </ul>
+
+            <span>Technical Metrics</span>
+            <ul>
+                <li>
+                    <strong>Codebase:</strong> ~8,000 lines across frontend (React), backend (Express), and AI service
+                    (FastAPI).
+                </li>
+                <li>
+                    <strong>Components:</strong> 25+ React components following ShadCN/Radix UI patterns for consistency.
+                </li>
+                <li><strong>API Endpoints:</strong> 15+ REST endpoints across auth, resume CRUD, and AI generation.</li>
+                <li><strong>Database Tables:</strong> 8 tables with proper normalization, foreign keys, and indexes.</li>
+                <li>
+                    <strong>AI Integration:</strong> OpenAI Agents SDK with GPT-4, using tuned temperature parameters
+                    (0.3-0.5) and carefully engineered prompts for resume optimization and analysis.
+                </li>
+                <li><strong>Development Time:</strong> 24 hours with 4 developers = 96 person-hours.</li>
+            </ul>
+
+            <span>Hackathon Outcome</span>
+            <p>
+                While we did not win the hackathon (we missed the submission deadline by mere seconds), 
+                the project succeeded in its primary goal: proving that AI can meaningfully accelerate a real-world pain 
+                point (resume tailoring) without replacing human judgment. Users remain in control, tweaking and approving
+                AI suggestions rather than blindly accepting them.
+            </p>
+
+            <span>Future Enhancements</span>
+            <p>
+                The 24-hour constraint meant several planned features remain unimplemented. Natural next steps include:
+            </p>
+            <ul>
+                <li><strong>LinkedIn Integration:</strong> Auto-populate master resume from LinkedIn profile data,
+                    reducing initial setup friction.
+                </li>
+                <li><strong>Resume Analytics:</strong> Track which experiences and bullet points are most frequently
+                    selected, surfacing your "best" achievements.
+                </li>
+                <li><strong>Multi-format Export:</strong> Support LaTeX, Word, and HTML resume formats beyond PDF.</li>
+                <li><strong>Collaborative Features:</strong> Enable resume review by mentors or career coaches with
+                    inline comments and suggestions.
+                </li>
+            </ul>
+            <p>
+                ResumATE demonstrates that AI-powered tools can meaningfully improve productivity workflows without
+                requiring users to trust black-box decisions. By combining intelligent automation with human oversight,
+                we created a system that feels like having an expert resume writer on call. Fast, consistent, and
+                always available.
+            </p>
+
+            <video id="resumate-video" tabindex="0" controls width="100%" style="border-radius: 8px;" poster="../imgs/resumATE.png">
+                <source src="../videos/ResumATE.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+    </main>
+    <main-footer></main-footer>
+</body>
+
+</html>

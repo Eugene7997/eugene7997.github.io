@@ -1,19 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - Eugene's Website</title>
+    <link rel="icon" href="./imgs/icon.svg" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.css">
     <script src="./javascript/index.js"></script>
 </head>
+
 <body>
     <main-header></main-header>
     <h1>Projects</h1>
     <p>
         Welcome to my projects page!
     </p>
-    <p>Surprise! I don't have any projects to show just yet. However, you can check out my github profile for some public repositories <a href="https://github.com/Eugene7997" target="_blank">here</a>.
+    <section class="projects" aria-label="Projects">
+        <div class="projects-grid">
+
+            <article class="project-card" onclick="location.href='./projects/project-cursor-hackathon.html'">
+                <div class="project-media" aria-hidden="true">
+                    <img src="./imgs/cursor_hackathon.png" alt="Screenshot of Cursor Hackathon project" width="600"
+                        height="360" loading="lazy" />
+                </div>
+                <div class="project-summary">
+                    <h2 class="project-title">Cursor Hackathon</h2>
+                    <p class="project-desc">​Cursor’s first official 24 hour hackathon in Singapore.</p>
+                    <p class="project-tech"><strong>Tech:</strong> ReactJS • Tailwindcss • JavaScript ...more</p>
+                    <p class="project-dates">
+                        <strong>Dates:</strong> <time class="project-start">18 Oct 2025</time>
+                        <span class="sep">—</span> <time class="project-end">19 Oct 2025</time>
+                    </p>
+                    <p class="project-status">
+                        <strong>Status:</strong> Done
+                    </p>
+                    <p class="project-links">
+                        <a href="https://github.com/malcolmling97/ResumATE" target="_blank" rel="noopener">View on
+                            GitHub</a>
+                    </p>
+                </div>
+            </article>
+
+            <article class="project-card" onclick="location.href='./projects/project-expense-tracker.html'">
+                <div class="project-media" aria-hidden="true">
+                    <placeholder-media />
+                </div>
+                <div class="project-summary">
+                    <h2 class="project-title">Expense Tracker App</h2>
+                    <p class="project-desc">A desktop application for tracking expenses and managing budgets.</p>
+                    <p class="project-tech"><strong>Tech:</strong> Spring Boot • Electron • TypeScript ...more</p>
+                    <p class="project-dates"><strong>Dates:</strong> <time class="project-start">Aug 2025</time>
+                        <span class="sep">—</span> <time class="project-end">TBD</time>
+                    </p>
+                    <p class="project-status">
+                        <strong>Status:</strong> Active Development
+                    </p>
+                    <p class="project-links">
+                        <a href="https://github.com/malcolmling97/ResumATE" target="_blank" rel="noopener">View on
+                            GitHub</a>
+                    </p>
+                </div>
+            </article>
+
+            <article class="project-card" onclick="location.href='./projects/project-todoodle.html'">
+                <div class="project-media" aria-hidden="true">
+                    <img src="./imgs/todoodle.png" alt="Screenshot of Todoodle project" width="600" height="360"
+                        loading="lazy" />
+                </div>
+                <div class="project-summary">
+                    <h2 class="project-title">Todoodle</h2>
+                    <p class="project-desc">
+                        A fun to-do list web app with a playful design, smooth animations and maybe something more.
+                    </p>
+                    <p class="project-tech"><strong>Tech:</strong> ReactJS • NodeJS • JavaScript ...more</p>
+                    <p class="project-dates">
+                        <strong>Dates:</strong> <time class="project-start">July 2025</time>
+                        <span class="sep">—</span> <time class="project-end">TBD</time>
+                    </p>
+                    <p class="project-status">
+                        <strong>Status:</strong> Maintenance
+                    </p>
+                    <p class="project-links">
+                        <a href="https://github.com/Eugene7997/ToDoodle" target="_blank" rel="noopener">View on
+                            GitHub</a>
+                        <span class="sep">•</span>
+                        <a href="https://www.todoodle.site" target="_blank" rel="noopener">Live demo</a>
+                    </p>
+                </div>
+            </article>
+
+            <article class="project-card" onclick="location.href='./projects/project-personal-portfolio.html'">
+                <div class="project-media" aria-hidden="true">
+                    <img src="./imgs/personal_portfolio_img.png" alt="Screenshot of personal portfolio project"
+                        width="600" height="360" loading="lazy">
+                </div>
+                <div class="project-summary">
+                    <h2 class="project-title">Personal Portfolio Demo</h2>
+                    <p class="project-desc">
+                        A compact, responsive portfolio built with plain HTML, CSS
+                        and vanilla JavaScript. A good project to play with the bare minimums.
+                    </p>
+                    <p class="project-tech"><strong>Tech:</strong> HTML • CSS • JavaScript</p>
+                    <p class="project-dates"><strong>Dates:</strong> <time class="project-start">April 2025</time> <span
+                            class="sep">—</span> <time class="project-end">TBD</time></p>
+                    <p class="project-status">
+                        <strong>Status:</strong> Maintenance
+                    </p>
+                    <p class="project-links">
+                        <a href="https://github.com/Eugene7997/eugene7997.github.io" target="_blank" rel="noopener">View
+                            on GitHub</a>
+                        <span class="sep">•</span>
+                        <a href="https://eugene7997.github.io/" target="_blank" rel="noopener">Live demo</a>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
     <main-footer></main-footer>
 </body>
+
 </html>

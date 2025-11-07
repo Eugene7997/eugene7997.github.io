@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Todoodle — Project Details</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../javascript/index.js"></script>
+</head>
+
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>Todoodle</h1>
+        <p class="lead">
+            A full-stack task management web application with multi-provider authentication, organized folder systems, 
+            and automated maintenance. Built to explore modern web development while creating something genuinely useful.
+        </p>
+
+        <section class="detail-hero">
+            <video controls autoplay muted loop>
+                <source src="../videos/todoodle_short_demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+        <section class="detail-body">
+            <h2>Overview</h2>
+            <p>
+                Todoodle is a comprehensive task management application that goes beyond basic CRUD operations. 
+                It features a REST API backend with PostgreSQL persistence, multi-provider authentication with 
+                email verification, organized folder management, and automated cleanup jobs. The frontend uses 
+                React with TypeScript and Zustand for type safe state management, providing a responsive and 
+                intuitive user experience.
+            </p>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/jeremyu25/Todoodle" target="_blank" rel="noopener">
+                    View source on GitHub
+                </a>
+                <a class="btn ghost" href="https://www.todoodle.site" target="_blank" rel="noopener">Live demo</a>
+            </p>
+
+            <h2>Features</h2>
+            <ul>
+                <li>Multi-Provider Authentication supporting local registration with bcrypt password hashing, Google OAuth 2.0, and email verification flows using JWT tokens.</li>
+                <li>Task Management with create, edit, delete operations and status tracking (Not Started, In Progress, Completed).</li>
+                <li>Folder Organization System with color coded folders, customizable names, and descriptions for better task categorization.</li>
+                <li>Advanced Filtering & Sorting capabilities to filter by status and folder, sort by date, title, status, priority, or folder.</li>
+                <li>Real-time Search Functionality across all tasks with instant results.</li>
+                <li>Automated Email Notifications via Mailgun for verification, password resets, and account changes.</li>
+                <li>Profile Management allowing users to update username, email (with verification), and password securely.</li>
+                <li>PostgreSQL Database Persistence with normalized schema and secure CRUD operations.</li>
+                <li>Automated Cleanup Jobs using cron to remove expired verification tokens and staging user accounts daily.</li>
+                <li>API Documentation with OpenAPI 3.0 specification served via Swagger UI.</li>
+                <li>Responsive Design with mobile friendly interface and smooth animations.</li>
+            </ul>
+
+            <h2>Tech stack</h2>
+            <p>
+                <strong>Frontend:</strong> React 19 • TypeScript • Vite • Zustand • React Router • React Icons<br>
+                <strong>Backend:</strong> Node.js • Express.js • Passport.js • JWT • Bcrypt<br>
+                <strong>Database:</strong> PostgreSQL (Supabase)<br>
+                <strong>Services:</strong> Google OAuth 2.0 • Mailgun • Cron<br>
+                <strong>DevOps:</strong> Docker • Swagger UI • Vercel • Railway
+            </p>
+
+            <h2>Problem Statement</h2>
+            <p>
+                After taking a break from web development, I wanted to rebuild my skills through a meaningful full stack 
+                project. While todo apps are a common starting point, I saw an opportunity to go beyond the typical tutorial 
+                implementation. Most todo apps store data in localStorage or use mock authentication. I wanted to explore 
+                production ready features, such as real database design, secure authentication with multiple providers, email 
+                verification flows, automated maintenance tasks, and proper API documentation.
+            </p>
+            <p>
+                The goal was to create something functional enough for real world use while learning modern web development 
+                practices. I wanted to experience the challenges of building a full stack application from scratch, including 
+                state management, authentication complexity, database relationships, deployment considerations, and all the 
+                small details that separate a learning project from a production application.
+            </p>
+
+            <h2>Solution</h2>
+            <p>
+                To build a production ready task management application, I implemented a full stack architecture 
+                with several key technical solutions:
+            </p>
+
+            <span>Multi-Provider Authentication System</span>
+            <p>
+                Instead of simple username/password authentication, I implemented a comprehensive authentication system 
+                using Passport.js that supports both local accounts and Google OAuth 2.0. For local accounts, passwords are 
+                hashed with bcrypt before storage, and JWT tokens manage sessions via secure HTTP only cookies. The 
+                system includes email verification flows where new users receive a verification link via Mailgun, and 
+                tokens expire after 24 hours. Password changes and email updates trigger new verification emails to 
+                ensure account security. The auth flow integrates with Express sessions and uses <code>cookie-parser</code> 
+                for secure cookie management with <code>{ secure: true, httpOnly: true, sameSite: 'strict' }</code> 
+                settings in production.
+            </p>
+
+            <span>Zustand State Management Architecture</span>
+            <p>
+                Rather than using Redux or Context API, I chose Zustand for its simplicity and performance that fits a small to 
+                medium sized app like ToDoodle. The application uses four separate stores: <code>authStore</code> for user 
+                authentication state, <code>toDoStore</code> for tasks and folders data, <code>uiStore</code> for UI state 
+                like modals and forms, and <code>filtersStore</code> for search, filter, and sort preferences. 
+                This separation prevents unnecessary re-renders and keeps the codebase maintainable. Each store handles its 
+                own API calls and state updates, with devtools integration for debugging. For example, <code>toDoStore</code> 
+                manages both tasks and folders in a single store since they are tightly coupled, while <code>filtersStore</code> 
+                implements memoized selectors for efficient filtered and sorted task lists.
+            </p>
+
+            <span>Database Design with PostgreSQL</span>
+            <p>
+                The backend uses a normalized PostgreSQL schema with five main tables: <code>users</code> for account data, 
+                <code>notes</code> (tasks) with foreign keys to users and folders, <code>folders</code> for organization, 
+                <code>feedback</code> for user submissions, and <code>pending_email_changes</code> for tracking email 
+                update requests. The database handles cascading deletes, ensuring that when a user is deleted, all their 
+                tasks and folders are removed automatically. Foreign key constraints maintain referential integrity. I used 
+                UUIDs for primary keys instead of auto-incrementing integers for better security and distributed system 
+                compatibility. The schema includes created_at and updated_at timestamps, with triggers to automatically 
+                update the latter.
+            </p>
+
+            <span>RESTful API with Express.js</span>
+            <p>
+                The backend implements a clean REST API structure with routes organized by resource: 
+                <code>/api/v1/auth</code> for authentication, <code>/api/v1/note</code> for tasks, 
+                <code>/api/v1/folder</code> for folders, and <code>/api/v1/feedback</code> for user feedback. 
+                Each route module connects to a controller that handles business logic, which calls model functions 
+                for database operations. Middleware handles JWT verification, CORS configuration for cross-origin 
+                requests from the React frontend, and error handling. The API uses proper HTTP status codes and 
+                consistent JSON response formats with <code>{ status, data, message }</code> structure.
+            </p>
+
+            <span>Automated Maintenance with Cron Jobs</span>
+            <p>
+                To prevent database bloat, I implemented cron jobs using the <code>cron</code> package that run daily 
+                at midnight. The cleanup job removes expired email verification tokens and staging user accounts that 
+                were never verified. This is implemented in <code>services/cronJobs.js</code> with graceful shutdown 
+                handling for <code>SIGINT</code> and <code>SIGTERM</code> signals. The jobs log their activity to the 
+                console, reporting how many records were cleaned up. This automated maintenance ensures the database 
+                stays lean without manual intervention.
+            </p>
+
+            <span>Email Service Integration</span>
+            <p>
+                Email functionality uses Mailgun's HTTP API rather than SMTP, which is crucial because some platforms 
+                like Railway block SMTP ports. The email service in <code>services/emailService.js</code> sends HTML 
+                emails for account verification, password resets, and email change confirmations. Each email includes 
+                a verification link with a unique JWT token that expires after 24 hours. The service handles errors 
+                gracefully and logs all email operations for debugging.
+            </p>
+
+            <span>Type Safe Frontend with TypeScript</span>
+            <p>
+                The React frontend uses TypeScript throughout with strict type checking enabled. Custom types in 
+                <code>types/types.tsx</code> define the shape of tasks, folders, notes, and user data. API calls in 
+                <code>services/api.ts</code> use typed Axios instances with proper error handling. Components receive 
+                typed props, and Zustand stores have full type definitions for state and actions. This catches bugs at 
+                compile time and provides excellent IDE autocomplete support. Data transformers in 
+                <code>utils/dataTransformers.ts</code> convert between backend note format and frontend task format 
+                while maintaining type safety.
+            </p>
+
+            <span>API Documentation with Swagger</span>
+            <p>
+                API endpoints are documented using OpenAPI 3.0 specification in <code>docs/openapi.yaml</code>. In 
+                development mode, Swagger UI serves this documentation at <code>/api-docs</code>, providing an interactive 
+                interface to explore endpoints, request/response schemas, and even test API calls. Each endpoint includes 
+                descriptions, parameter definitions, response codes, and example payloads. This serves as both developer 
+                documentation and a testing tool.
+            </p>
+
+            <h2>Challenges Faced</h2>
+
+            <span>Authentication Flow Complexity</span>
+            <p>
+                Implementing secure authentication was more complex than anticipated. I had to handle multiple scenarios: 
+                local registration with email verification, Google OAuth callbacks, password resets, email changes with 
+                re-verification, and session management across both providers. The challenge was maintaining security 
+                while providing a smooth user experience. I learned the importance of JWT token expiration, secure cookie 
+                configuration with <code>httpOnly</code> and <code>sameSite</code> flags, and proper error messaging that 
+                does not leak security information. Debugging OAuth flows required understanding redirect URIs, state 
+                parameters, and callback handling. The staging user system (temporary accounts pending verification) 
+                added another layer of complexity to prevent database pollution.
+            </p>
+
+            <span>State Management and Data Synchronization</span>
+            <p>
+                Keeping frontend state synchronized with backend data across CRUD operations was challenging. When a user 
+                updates a task's status or folder name, that change needs to propagate to all related UI elements immediately 
+                without full page reloads. I used Zustand's set function with state updaters that map over arrays, but had 
+                to be careful about reference equality for React re-renders. The folder system was particularly tricky: 
+                when renaming a folder, I needed to update both the folders array and any task objects that reference that 
+                folder. I solved this by updating task.folder objects embedded in tasks whenever folder data changed, keeping 
+                the UI consistent without additional API calls.
+            </p>
+
+            <span>TypeScript Learning Curve</span>
+            <p>
+                Coming from JavaScript, TypeScript's strict typing initially slowed development. Defining proper interfaces 
+                for API responses, handling union types for different status values, and typing Zustand stores with generic 
+                constraints required deep understanding. Axios responses needed careful typing to avoid <code>any</code> types 
+                spreading through the codebase. The transformation between backend <code>snake_case</code> (note_id, folder_id) 
+                and frontend <code>camelCase</code> (noteId, folderId) required transformer functions with proper type 
+                definitions. However, once properly typed, the safety and autocomplete made refactoring much faster and caught 
+                many bugs before runtime.
+            </p>
+
+            <span>Database Schema Design and Migrations</span>
+            <p>
+                Designing a normalized database schema with proper foreign keys, constraints, and cascading deletes required 
+                careful planning. I had to decide between hard deletes vs. soft deletes, how to handle orphaned records when 
+                folders are deleted (should tasks be deleted or moved to a default folder?), and how to structure pending 
+                email changes. I learned to test migrations on dummy data first and to use transactions to ensure atomic changes. 
+                The relationship between users, folders, and notes required careful consideration of ON DELETE CASCADE behavior.
+            </p>
+
+            <span>CORS and Cookie Management</span>
+            <p>
+                Getting authentication to work across separate frontend and backend domains was frustrating. Cookies were not 
+                being sent with requests despite setting credentials: 'include' in fetch calls. Part of the problem stemmed from 
+                DNS domain differences. Browsers treat cookies and CORS requests differently when the frontend and backend are on 
+                separate domains (not just different ports). I learned about CORS preflight requests, the Access-Control-Allow-Credentials
+                header, and why Access-Control-Allow-Origin: * does not work with credentials. The solution required configuring 
+                Express CORS middleware with the exact domain origin, handling cross domain requests correctly, setting trust proxy
+                for Railway deployment, and ensuring cookie settings matched between development (localhost with secure: false) 
+                and production (HTTPS with secure: true).
+            </p>
+
+            <span>Email Service Platform Limitations</span>
+            <p>
+                Initially, I tried using Nodemailer with SMTP, but Railway (my backend host) blocks outbound SMTP ports to 
+                prevent spam. After hours of debugging why emails were not sending, I discovered the limitation and switched 
+                to Mailgun's HTTP API. This required refactoring the email service to use REST API calls instead of SMTP 
+                protocols. I also had to configure Mailgun's authorized recipients list for development and verify my domain 
+                for production. The switch taught me to research platform limitations before choosing technologies.
+            </p>
+
+            <span>CSS and Responsive Design</span>
+            <p>
+                Building a responsive interface from scratch required mastering CSS Grid, Flexbox, and media queries. The 
+                task card layout needed to work on mobile (320px), tablet, and desktop screens. Getting the folder color 
+                badges, status indicators, and action buttons to align properly took many iterations. I learned about CSS 
+                clamp() for fluid typography, proper use of rem vs. px units, and how to create smooth transitions without 
+                janky animations. The modal overlay for task details required understanding z-index stacking contexts and 
+                preventing body scroll while modals are open.
+            </p>
+
+            <h2>Lessons Learned</h2>
+            <span>Full Stack Architecture Requires Holistic Planning</span>
+            <p>
+                Building both frontend and backend taught me the importance of planning the entire data flow from database to UI. 
+                The SQL schema design and API contract are deeply interconnected. Decisions about database structure directly impact 
+                REST endpoint design, which then shapes frontend state management. For example, choosing to store task status as an 
+                enum in PostgreSQL meant the API needed to validate against those specific values, which led to defining TypeScript 
+                union types on the frontend. Similarly, deciding whether folders and tasks should be separate API endpoints or nested 
+                resources affected how Zustand stores were structured and how components fetched data.
+            </p>
+            <p>
+                I learned to design the database schema first, thinking through foreign key relationships (users → folders → tasks), 
+                cascade behaviors, and constraints. Then I mapped each table to REST resources with proper HTTP methods: 
+                <code>GET /api/v1/folder</code> to fetch folders, <code>POST /api/v1/note</code> to create tasks. The OpenAPI 
+                specification served as the contract between backend and frontend, documenting request/response schemas, validation 
+                rules, and error codes. This three layer planning, database → API → frontend state—prevented mismatches where the 
+                frontend expected data in a format the backend did not provide, or where the API returned snake_case fields when 
+                the frontend used camelCase. Starting with OpenAPI specification from day one would have been even better, forcing 
+                me to think through edge cases like "What happens when a user deletes a folder containing tasks?" before writing 
+                any code.
+            </p>
+
+            <span>Zustand Is a Game Changer for React State</span>
+            <p>
+                After using Redux in previous projects, Zustand felt refreshingly simple. No boilerplate, no actions/reducers 
+                split, just functions that update state directly. The devtools integration provides Redux like time travel 
+                debugging. Separating concerns into multiple stores (auth, todos, UI, filters) kept the code organized without 
+                prop drilling. The ability to use stores outside React components (like calling auth state from API interceptors) 
+                is incredibly useful.
+            </p>
+            <p>
+                Of course, without Redux, we lose the excellent ecosystem for time travel debugging, logging, replaying actions. 
+                But the tradeoffs are worth it in this case since the workflow complexity is on the lower end.
+            </p>
+
+            <span>TypeScript Pays Off in Refactoring</span>
+            <p>
+                While TypeScript slowed initial development, it saved enormous time during refactoring. When I changed the 
+                task status values or added new folder properties, TypeScript immediately showed every location that needed 
+                updates. The compile time errors prevented runtime bugs. Type inference worked surprisingly well, often 
+                requiring fewer type annotations than expected. IDE autocomplete with TypeScript made exploring unfamiliar 
+                APIs faster.
+            </p>
+
+            <span>Database Design Is About Trade offs</span>
+            <p>
+                Every database decision involves trade offs. Using UUIDs instead of integers makes URLs less guessable but 
+                uses more storage and is slower to index. Cascading deletes are convenient but dangerous if misconfigured. 
+                Soft deletes (adding a deleted_at timestamp) preserve data but complicate queries. I learned that there is 
+                no "perfect" schema, only designs that fit specific requirements and constraints.
+            </p>
+
+            <span>Authentication Is Deceptively Complex</span>
+            <p>
+                What seems simple, "let users log in", involves dozens of edge cases: What if they forget their password? 
+                What if they change their email? Should old sessions be invalidated? How long should tokens last? What 
+                happens to their data if they never verify their email? Implementing OAuth adds more complexity: handling 
+                failed authorizations, missing email addresses, account linking. Security requirements (password hashing, 
+                token expiration, rate limiting) compound the complexity. I gained deep respect for authentication-as-a-service 
+                providers like Auth0.
+            </p>
+
+            <span>Automated Cleanup Prevents Technical Debt</span>
+            <p>
+                Implementing cron jobs for cleanup was a small feature with big impact. Without it, the database would 
+                accumulate expired tokens and unverified accounts indefinitely. Automated maintenance prevents the need 
+                for manual database cleanup scripts. The pattern applies beyond cleanup: scheduled reports, backup jobs, 
+                data aggregation, and cache invalidation all benefit from cron based automation.
+            </p>
+
+            <span>Modern CSS Is Incredibly Powerful</span>
+            <p>
+                CSS Grid and Flexbox eliminated the need for layout frameworks like Bootstrap. Features like 
+                <code>clamp(1rem, 2vw, 1.5rem)</code> enable fluid typography without media queries. CSS custom properties 
+                (variables) made theming straightforward. The <code>:focus-visible</code> pseudo class improves accessibility 
+                by showing focus rings only for keyboard navigation. Modern CSS reduces JavaScript needs—animations, transitions, 
+                and even some interactivity (like :hover, :focus states) work purely in CSS.
+            </p>
+
+            <span>API Documentation Is Essential</span>
+            <p>
+                Writing OpenAPI specification alongside API development kept documentation current and accurate. Swagger UI 
+                made testing endpoints effortless, no need for Postman or curl commands. The documentation helped me think 
+                through edge cases: What should the response be for an empty list? What status code for validation errors? 
+                Good documentation is insurance against forgetting how your own API works weeks later.
+            </p>
+
+            <span>Deployment Constraints Shape Architecture</span>
+            <p>
+                Platform limitations (Railway blocking SMTP, Vercel's serverless function timeouts) forced architectural 
+                decisions. I learned to research hosting providers' constraints early. The need to support CORS for separate 
+                frontend/backend domains affected session management. Environment variables and configuration management 
+                became critical for supporting development, staging, and production environments. Real world deployment is 
+                messier than local development certificates, DNS, environment specific bugs, and platform quirks all create 
+                unexpected challenges.
+            </p>
+
+            <h2>Results</h2>
+            <p>
+                Todoodle evolved from a simple todo app concept into a production ready task management system. The application successfully handles user authentication across multiple 
+                providers, organizes tasks into customizable folders, maintains data integrity through automated cleanup, 
+                and provides a responsive interface that works seamlessly across devices.
+            </p>
+
+            <span>Key Achievements</span>
+            <ul>
+                <li><strong>Full Authentication:</strong> Secure multi provider system with JWT tokens, email verification, and OAuth 2.0 integration</li>
+                <li><strong>Type Safety:</strong> TypeScript coverage eliminating entire classes of runtime errors</li>
+                <li><strong>State Management:</strong> Clean Zustand architecture with separated concerns and optimized re-renders</li>
+                <li><strong>API Documentation:</strong> OpenAPI specification with interactive Swagger UI</li>
+                <li><strong>Database Design:</strong> Normalized PostgreSQL schema with proper relationships and constraints</li>
+                <li><strong>Automated Maintenance:</strong> Cron jobs handling cleanup without manual intervention</li>
+                <li><strong>Production Deployment:</strong> Successfully deployed on Vercel (frontend) and Railway (backend) with proper CORS and session management</li>
+                <li><strong>Responsive Design:</strong> Mobile first interface working from 320px to 4K displays</li>
+            </ul>
+
+            <p>
+                The project successfully achieved its goal of rebuilding web development skills while creating something 
+                genuinely useful. It demonstrates modern full stack development practices: REST API design, authentication 
+                flows, database relationships, state management, TypeScript integration, and deployment considerations. The 
+                codebase remains maintainable and extensible, with clear separation between layers (routes, controllers, 
+                models, services) and well organized frontend components.
+            </p>
+
+            <p>
+                Beyond technical achievements, the project reinforced important lessons about planning, trade offs, and the 
+                complexity hidden beneath seemingly simple features. What started as "just a todo app" became a comprehensive 
+                exploration of full stack development, touching everything from bcrypt password hashing to CSS Grid layouts, 
+                from JWT token expiration to PostgreSQL foreign key constraints.
+            </p>
+
+            <span>Potential Future Enhancements</span>
+            <ul>
+                <li><strong>Testing Suite:</strong> Jest for backend unit tests, React Testing Library for component tests, E2E tests with Playwright</li>
+                <li><strong>CI/CD Pipeline:</strong> GitHub Actions for automated testing, linting, and deployment</li>
+                <li><strong>Containerization:</strong> Docker setup for development and production deployment</li>
+                <li><strong>Real-time Features:</strong> WebSocket integration for live updates when tasks are modified</li>
+                <li><strong>Advanced Task Features:</strong> Due dates with reminders, priority levels, task dependencies, recurring tasks</li>
+                <li><strong>Collaboration:</strong> Shared folders with permissions, task assignments, comments and activity logs</li>
+                <li><strong>File Attachments:</strong> Upload files to tasks using cloud storage (AWS S3 or Cloudinary)</li>
+                <li><strong>Mobile App:</strong> React Native version sharing backend and business logic</li>
+                <li><strong>Analytics Dashboard:</strong> Task completion statistics, productivity insights, time tracking</li>
+            </ul>
+
+            <p>
+                Todoodle serves as both a functional productivity tool and a portfolio piece showcasing full stack 
+                development capabilities. It provides a solid foundation for future enhancements while demonstrating 
+                that even a "simple" todo app becomes complex and interesting when built with production grade features 
+                and best practices.
+            </p>
+        </section>
+    </main>
+    <main-footer></main-footer>
+</body>
+
+</html>

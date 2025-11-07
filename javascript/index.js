@@ -17,14 +17,17 @@ class CurrentDate extends HTMLElement {
 
 class Header extends HTMLElement {
     connectedCallback() {
-      this.innerHTML = `
+        const path = window.location.pathname.replace(/\\/g, '/');
+        const prefix = ['/projects/', '/blogs/'].some(p => path.includes(p)) ? '../' : '';
+        this.innerHTML = `
         <nav>            
             <div class="header">
                 <div class="links">
-                    <a href="index.html">Home</a>&nbsp;
-                    <a href="background.html">Background</a>&nbsp;
-                    <a href="projects.html">Projects</a>&nbsp;
-                    <a href="blogs.html">Blogs</a>
+                    <a href="${prefix}index.html">Home</a>&nbsp;
+                    <a href="${prefix}background.html">Background</a>&nbsp;
+                    <a href="${prefix}experiences.html">Experiences</a>&nbsp;
+                    <a href="${prefix}projects.html">Projects</a>&nbsp;
+                    <a href="${prefix}blogs.html">Blogs</a>
                 </div>
             </div>
             <div class="border" />
@@ -34,11 +37,11 @@ class Header extends HTMLElement {
 }
 
 class Footer extends HTMLElement {
-connectedCallback() {
-    this.innerHTML = `    
+    connectedCallback() {
+        this.innerHTML = `    
     <footer>            
         <div class="footer">
-            <p><i>Last modified: 11/08/2025</i></p>
+            <p><i>Last modified: 07/11/2025</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
@@ -86,7 +89,7 @@ class ShowerThoughts extends HTMLElement {
         // Accordion functionality
         accordionHeader.addEventListener('click', () => {
             const isExpanded = accordionHeader.getAttribute('aria-expanded') === 'true';
-            
+
             if (isExpanded) {
                 accordionHeader.setAttribute('aria-expanded', 'false');
                 accordionContent.style.maxHeight = '0px';
@@ -113,7 +116,118 @@ class ShowerThoughts extends HTMLElement {
     }
 }
 
+class PlaceholderMedia extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+            <svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" role="img"
+                aria-label="Project placeholder">
+                <defs>
+                    <linearGradient id="g" x1="0" x2="1">
+                        <stop offset="0" stop-color="#e9eef8" />
+                        <stop offset="1" stop-color="#f6fbff" />
+                    </linearGradient>
+                </defs>
+                <rect width="600" height="360" fill="url(#g)" rx="8" />
+                <g fill="#c7d6ef" opacity="0.9">
+                    <rect x="36" y="36" width="160" height="120" rx="6" />
+                    <rect x="220" y="36" width="324" height="28" rx="6" />
+                    <rect x="220" y="74" width="200" height="14" rx="4" />
+                    <rect x="220" y="98" width="140" height="14" rx="4" />
+                </g>
+            </svg>
+        `;
+    }
+}
+
 customElements.define('current-date', CurrentDate);
 customElements.define('main-header', Header);
 customElements.define('main-footer', Footer);
 customElements.define('shower-thoughts', ShowerThoughts);
+customElements.define('placeholder-media', PlaceholderMedia);
+
+document.addEventListener('click', function (e) {
+    const stopSelectors = [
+        '.project-title',
+        '.project-desc',
+        '.project-tech',
+        '.project-dates',
+        '.project-status',
+        '.project-links a'
+    ];
+    // If the click originated on an anchor inside any element matching stopSelectors, 
+    // stop propagation so the card's onclick won't override it.
+    if (stopSelectors.some(sel => e.target.closest(sel))) {
+        e.stopPropagation();
+    }
+}, true);
+
+// Generic handler: any element with `data-focus-target` will scroll-to and focus the target element.
+document.addEventListener('DOMContentLoaded', () => {
+    const triggers = document.querySelectorAll('[data-focus-target]');
+    if (!triggers || triggers.length === 0) return;
+
+    function scrollAndFocus(target, { offset = 0, autoplay = false } = {}) {
+        if (!target) return;
+
+        // If the target isn't naturally focusable, give it a temporary tabindex so it can receive focus.
+        let addedTempTabindex = false;
+        if (!target.hasAttribute('tabindex')) {
+            target.setAttribute('tabindex', '-1');
+            addedTempTabindex = true;
+        }
+
+        try {
+            if (offset && Number.isFinite(offset) && offset !== 0) {
+                const rect = target.getBoundingClientRect();
+                const top = window.scrollY + rect.top - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+            } else {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Focus after a short delay so the smooth scroll doesn't get interrupted.
+            setTimeout(() => {
+                try {
+                    target.focus({ preventScroll: true });
+                } catch (e) {
+                    target.focus();
+                }
+
+                if (autoplay && typeof target.play === 'function') {
+                    target.play().catch(() => { /* ignore play errors */ });
+                }
+            }, 400);
+        } catch (err) {
+            // Fallback: immediate focus
+            try {
+                target.focus({ preventScroll: true });
+            } catch (e) {
+                target.focus();
+            }
+            if (autoplay && typeof target.play === 'function') target.play().catch(() => {});
+        }
+
+        // Optionally clean up the temporary tabindex later if needed. We leave it so keyboard users
+        // can still tab to the element, which is often beneficial for accessibility.
+    }
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', (ev) => {
+            // Allow native button behavior to stay intact for non-action triggers; prevent default
+            // to avoid accidental form submits when used inside forms.
+            ev.preventDefault();
+
+            const selector = trigger.getAttribute('data-focus-target');
+            if (!selector) return;
+
+            const target = document.querySelector(selector);
+            if (!target) return;
+
+            const autoplay = trigger.hasAttribute('data-autoplay');
+            const offsetAttr = trigger.getAttribute('data-focus-offset');
+            const offset = offsetAttr ? parseInt(offsetAttr, 10) || 0 : 0;
+
+            scrollAndFocus(target, { offset, autoplay });
+        });
+    });
+});

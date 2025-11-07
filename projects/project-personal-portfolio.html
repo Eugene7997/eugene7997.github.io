@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Personal Portfolio Demo — Project Details</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../javascript/index.js"></script>
+</head>
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>Personal Portfolio Demo</h1>
+        <p class="lead">
+            A compact, responsive portfolio built with plain HTML, CSS
+            and vanilla JavaScript. A good project to play with the bare minimums.
+        </p>
+
+        <section class="detail-hero">
+            <img src="../imgs/old_personal_portfolio_web_vid.gif" alt="Screenshot of Personal Portfolio Demo project">
+        </section>
+
+        <section class="detail-body">
+            <h2>Overview</h2>
+            <p>
+                This demo showcases a minimal, accessible portfolio layout. It uses semantic HTML, 
+                a responsive CSS grid for project cards, and progressive enhancement via small JavaScript 
+                helpers for interactions.
+            </p>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/Eugene7997/eugene7997.github.io" target="_blank" rel="noopener">View source on GitHub</a>
+                <a class="btn ghost" href="https://eugene7997.github.io/index.html" target="_blank" rel="noopener">Live demo</a>
+            </p>
+            <div>
+                <h3>Features</h3>
+                <ul>
+                    <li>Reusable UI elements built with native Custom Elements API.</li>
+                    <li>Zero Framework Dependencies. Pure HTML, CSS, and vanilla JavaScript. No React, jQuery, or build tools required.</li>
+                    <li>Lightweight & Fast Minimal JavaScript footprint (~4KB) with no build process or bundler overhead.</li>
+                    <li>Intelligent Path Resolution to adjust relative paths based on current page location.</li>
+                    <li>Progressive Enhancement Core content accessible even without JavaScript, with enhanced interactivity when available.</li>
+                    <li>Responsive CSS Grid-based project cards that adapt seamlessly from mobile (320px) to desktop.</li>
+                    <li>Semantic HTML5 elements, ARIA attributes, keyboard navigation support, and screen reader compatibility.</li>
+                    <li>Interactive Elements such as smooth scrolling, accordion menus, focus management, and animated "Shower Thoughts" feature with vanilla JS.</li>
+                </ul>
+                <h3>Tech stack</h3>
+                <p>HTML5 • CSS3 • Vanilla JavaScript (ES6+) • Web Components API • GitHub Pages</p>
+            </div>
+            <h2>Problem Statement</h2>
+            <p>
+                As a developer, I wanted a simple portfolio template to showcase my projects and etc.
+                I decided to use github pages since it was free and I don't have to worry about hosting.
+                However, I am restricted to using just static files without any backend support. 
+            </p>
+            <p>
+                Now, I could have just used React and generate static content from there but then again, 
+                this presents an opportunity to hone my foundational web development skills by building 
+                a portfolio from scratch using just HTML, CSS and vanilla JavaScript. 
+                So I thought, "Why not?".
+            </p>
+            <h2>Solution</h2>
+            <p>
+                To build a functional portfolio with just HTML, CSS, and vanilla JavaScript, I implemented several key solutions:
+            </p>
+            <span>Web Components for Reusable UI Elements</span>
+            <p>
+                Instead of using a framework, I leveraged native Web Components (Custom Elements) to create reusable components 
+                like <code>&lt;main-header&gt;</code>, <code>&lt;main-footer&gt;</code>, <code>&lt;shower-thoughts&gt;</code>, 
+                <code>&lt;placeholder-media&gt;</code>, and even an interactive <code>&lt;dino-game&gt;</code> component. 
+                This eliminated code duplication across pages while keeping the project framework free. Each component 
+                encapsulates its own HTML structure and behavior, making the codebase maintainable and modular.
+            </p>
+            <p>
+                For example, the <code>&lt;dino-game&gt;</code> component is a fully functional Chrome dinosaur style game 
+                built entirely in vanilla JavaScript with canvas rendering, collision detection, and progressive difficulty. 
+                By wrapping it in a Custom Element with <code>customElements.define('dino-game', DinoGame)</code>, I can 
+                embed it anywhere in my site with just <code>&lt;dino-game&gt;&lt;/dino-game&gt;</code>. No props, no 
+                imports, no build configuration. The component manages its own state, event listeners, and game loop using 
+                <code>requestAnimationFrame</code>, demonstrating how Web Components can encapsulate complex functionality 
+                just as effectively as React or Vue components.
+            </p>
+            <span>Responsive CSS Grid Layout</span>
+            <p>
+                For the projects page, I used CSS Grid with <code>grid-template-columns: repeat(auto-fit, minmax(320px, 1fr))</code> 
+                to create a responsive card layout that automatically adjusts to different screen sizes without JavaScript. 
+                Combined with Flexbox for internal card layouts and media queries for mobile optimization, the site remains 
+                fully responsive across all devices.
+            </p>
+            <span>Dynamic Navigation with Path Detection</span>
+            <p>
+                The header component intelligently detects the current page location using <code>window.location.pathname</code> 
+                and adjusts relative paths accordingly. This allows the same header component to work correctly whether it is 
+                on the root pages or in subdirectories like <code>/projects/</code> or <code>/blogs/</code>.
+            </p>
+            <span>Interactive Elements Without jQuery</span>
+            <p>
+                All interactivity e.g. accordion menus, smooth scrolling, focus management, and the "Shower Thoughts" feature, was 
+                built using vanilla JavaScript and the DOM API. Event delegation and modern JavaScript features like template 
+                literals and arrow functions kept the code clean and performant.
+            </p>
+            <span>Semantic HTML and Accessibility</span>
+            <p>
+                I used semantic HTML5 elements (<code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, 
+                <code>&lt;nav&gt;</code>) and ARIA attributes (<code>aria-label</code>, <code>aria-expanded</code>) 
+                to ensure the site is accessible to screen readers and keyboard navigation users.
+            </p>
+            
+            <h2>Challenges Faced</h2>
+            <span>Component Reusability Without a Framework</span>
+            <p>
+                One of the biggest challenges was avoiding code duplication across multiple HTML pages without using 
+                a framework like React. I needed a way to share common elements like headers and footers. The solution 
+                was implementing native Web Components with <code>customElements.define()</code>, which I hadn't used 
+                extensively before. Learning the lifecycle methods like <code>connectedCallback()</code> and understanding 
+                when components mount was a learning curve.
+            </p>
+            
+            <span>Path Resolution Across Different Directory Levels</span>
+            <p>
+                Since pages exist at different levels (root vs. <code>/projects/</code> subdirectory), linking to assets 
+                became tricky. Hard-coding relative paths like <code>../css/index.css</code> would break depending on the 
+                page location. I solved this by implementing dynamic path detection in the header component that checks 
+                <code>window.location.pathname</code> and prepends <code>../</code> when needed.
+            </p>
+
+            <span>Responsive Design Without Bootstrap</span>
+            <p>
+                Creating a truly responsive layout from scratch required deep understanding of CSS Grid, Flexbox, and 
+                media queries. Getting the project cards to reflow naturally across mobile, tablet, and desktop viewports 
+                while maintaining visual harmony took multiple iterations. The <code>clamp()</code> function and 
+                <code>auto-fit</code> grid behavior were essential discoveries.
+            </p>
+
+            <span>Maintaining Accessibility Standards</span>
+            <p>
+                Ensuring keyboard navigation, screen reader compatibility, and proper focus management without an 
+                accessibility framework required manual implementation of ARIA attributes, focus states, and semantic 
+                HTML. Testing with keyboard-only navigation revealed issues with the accordion component that needed 
+                <code>aria-expanded</code> and proper role assignments.
+            </p>
+
+            <h2>Lessons Learned</h2>
+            <span>Web Platform Capabilities Are Powerful</span>
+            <p>
+                This project reinforced that modern browsers provide robust native features that rival what frameworks 
+                offer. Web Components with the Custom Elements API let me create reusable components without React or 
+                Vue. The browser handles the lifecycle and mounting natively.
+            </p>
+            <p>
+                For example, the <code>&lt;dino-game&gt;</code> 
+                component is a fully functional game with canvas rendering, collision detection, state management (score, 
+                obstacles, game speed), and a complete game loop using <code>requestAnimationFrame</code>. All of this 
+                complex interactivity is encapsulated in a native Web Component, proving they can handle the same stateful 
+                features you would typically use React or Vue for. CSS Grid eliminated the need for Bootstrap's grid system, 
+                providing a more powerful and flexible layout engine built right into CSS. Even features I did not use, 
+                like the Fetch API for network requests or IntersectionObserver for scroll detection, are available 
+                natively without external libraries.
+            </p>
+            <p>
+                The key insight is that frameworks were originally created to fill gaps in browser capabilities. For example,
+                jQuery smoothed over DOM API inconsistencies, React introduced components when none existed natively, and 
+                Babel transpiled modern JavaScript for older browsers. Today, many of these problems are solved by the 
+                platform itself. Understanding what is available natively helps make better architectural decisions about 
+                when frameworks are truly needed versus when you're just adding unnecessary complexity and bundle size. 
+                For a portfolio site like this, the native platform was more than sufficient.
+            </p>
+
+            <span>CSS is not Easy</span>
+            <p>
+                Working with CSS taught me that even small differences in rules can have a big impact. 
+                For example, CSS Grid is ideal for 2D layouts like a project cards grid, whereas Flexbox 
+                is better for 1D arrangements, such as navigation links or the internals of a card. 
+                Something as seemingly simple as <code>repeat(auto-fit, minmax(320px, 1fr))</code> can 
+                completely change responsiveness, adjusting column counts automatically without any media queries. 
+                Minor changes, like switching <code>auto-fit</code> to <code>auto-fill</code> or using 
+                <code>justify-content: center</code> versus <code>space-between</code>, can subtly but significantly 
+                alter layout behavior, showing just how nuanced CSS really is.
+            </p>
+
+            <span>Vanilla JavaScript Isn't "Hard". It's Just Different</span>
+            <p>
+                Working without jQuery or React revealed that vanilla JavaScript has become much more ergonomic with 
+                ES6+ features. Modern features like template literals for building HTML strings, arrow functions for 
+                cleaner syntax, and <code>querySelector</code>/<code>querySelectorAll</code> for DOM selection make 
+                vanilla JavaScript surprisingly pleasant to work with.
+            </p>
+            <p>
+                The real difference isn't difficulty, it is the mental model. Frameworks like React abstract away DOM 
+                manipulation with state management and virtual DOM, while vanilla JS requires you to think more directly 
+                about the browser's event system, lifecycle, and DOM structure. For example, instead of React's 
+                <code>useState</code> and automatic re-renders, I manually updated the DOM when the "Shower Thoughts" 
+                button was clicked. This requires more explicit code but gives you complete control and understanding 
+                of what is happening under the hood.
+            </p>
+            <p>
+                The challenge is the ongoing maintenance and keeping up with browser APIs, cross-browser quirks, and 
+                best practices. Frameworks handle much of this complexity for you, but I realised that understanding 
+                vanilla JavaScript deeply makes you a better developer regardless of which tools you eventually use 
+                since you know what the abstractions are actually doing.
+            </p>
+            
+            <h2>Results</h2>
+            <p>
+                The final portfolio achieves its goal of being a lightweight, maintainable showcase built entirely on 
+                web fundamentals. With zero framework dependencies, the entire site loads quickly and remains performant 
+                across all devices.
+            </p>
+            <span>Key Metrics</span>
+            <ul>
+                <li><strong>Bundle Size:</strong> No build step required, minimal JavaScript (~4KB total)</li>
+                <li><strong>Performance:</strong> Fast initial load with no framework overhead</li>
+                <li><strong>Accessibility:</strong> Semantic HTML with proper ARIA attributes for screen readers</li>
+                <li><strong>Maintainability:</strong> Web Components enable easy updates across all pages</li>
+                <li><strong>Browser Support:</strong> Works on all modern browsers supporting Web Components</li>
+            </ul>
+            <p>
+                This project serves as both a functional portfolio and a testament to what is achievable with foundational 
+                web technologies. It provides a decent base for future enhancements. I can add more interactive features, integrate 
+                a headless CMS for blog content, or even convert it to a PWA, all while maintaining the lightweight, 
+                framework-free architecture.
+            </p>
+        </section>
+    </main>
+    <main-footer></main-footer>
+</body>
+</html>

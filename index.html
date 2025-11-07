@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eugene's website</title>
+    <link rel="icon" href="./imgs/icon.svg" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="./javascript/index.js"></script>
 </head>
 
@@ -16,15 +18,30 @@
             <div class="profile-container">
                 <img src="./imgs/profile_picture.jpg" alt="Eugene's profile picture">
                 <div class="address">
-                    <h3>📍 Singapore</h3>
+                    <h3><span class="fa fa-map-marker"></span> Singapore</h3>
                 </div>
-                <div class="contact">
-                    <a class="no-underline" href="mailto:eugene134@protonmail.com"><span>📧</span><span
-                            style="text-decoration: underline;"> eugene134@protonmail.com</span></a><br>
-                    <a class="no-underline" href="https://www.linkedin.com/in/eugene-poh/"><span>💼</span><span
-                            style="text-decoration: underline;"> LinkedIn</span></a><br>
-                    <a class="no-underline" href="https://github.com/Eugene7997"><span>🐙</span><span
-                            style="text-decoration: underline;"> GitHub</span></a>
+                <div class="contact-links">
+                    <div class="contact-link-container">
+                        <a href="mailto:eugene134@protonmail.com">
+                            <span class="fa fa-envelope"></span>
+                            <span style="text-decoration: underline;"> eugene134@protonmail.com</span>
+                        </a>
+                    </div>
+                    <div class="contact-link-container">
+                        <a href="https://www.linkedin.com/in/eugene-poh/" target="_blank" rel="noopener">
+                            <span class="fa fa-briefcase"></span><span style="text-decoration: underline;">
+                                LinkedIn
+                            </span>
+                        </a>
+                    </div>
+                    <div class="contact-link-container">
+                        <a href="https://github.com/Eugene7997" target="_blank" rel="noopener">
+                            <span class="fa fa-github"></span>
+                            <span style="text-decoration: underline;">
+                                GitHub
+                            </span>
+                        </a>
+                    </div>
                 </div>
                 <p style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; margin: 10px 0;">
                     I'm your everyday normal computer science / software engineer guy.
@@ -34,20 +51,21 @@
         <div class="hero-container">
             <h1>Hi 👋! I am Eugene.</h1>
             <h2>Welcome to my digital space!</h1>
-            <p style="color: #555">
-                Here, I share bits of my software journey, projects, and thoughts.
-            </p>
-            <p>
-                I'm a passionate software engineer who loves turning ideas into reality through code. 
-                When I'm not debugging or building projects, you'll find me exploring new technologies. 
-                
-            </p>
-            <h2>What I’m up to</h2>
-            <p>
-                Right now, I’m exploring AI integrations, cloud deployment, and modern CI/CD pipelines.
-            </p>
-            <p>Feel free to reach out to me if you have any questions or like to collaborate on open-source projects!</p>
-            <shower-thoughts></shower-thoughts>
+                <p style="color: #555">
+                    Here, I share bits of my software journey, projects, and thoughts.
+                </p>
+                <p>
+                    I'm a passionate software engineer who loves turning ideas into reality through code.
+                    When I'm not debugging or building projects, you'll find me exploring new technologies.
+
+                </p>
+                <h2>What I’m up to</h2>
+                <p>
+                    Right now, I’m exploring AI integrations, cloud deployment, and modern CI/CD pipelines.
+                </p>
+                <p>Feel free to reach out to me if you have any questions or like to collaborate on open-source
+                    projects!</p>
+                <shower-thoughts></shower-thoughts>
         </div>
     </div>
 
