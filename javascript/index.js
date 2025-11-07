@@ -81,7 +81,7 @@ class Header extends HTMLElement {
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
                 const isDark = document.documentElement.classList.toggle('dark');
-                try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+                try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) { }
                 applyTheme(isDark);
             });
         }
@@ -90,7 +90,7 @@ class Header extends HTMLElement {
             const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
             hamburger.setAttribute('aria-expanded', !isExpanded);
             links.classList.toggle('active');
-            
+
             // Toggle between bars and times icon
             if (hamburgerIcon.classList.contains('fa-bars')) {
                 hamburgerIcon.classList.remove('fa-bars');
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 target.focus();
             }
-            if (autoplay && typeof target.play === 'function') target.play().catch(() => {});
+            if (autoplay && typeof target.play === 'function') target.play().catch(() => { });
         }
 
         // Optionally clean up the temporary tabindex later if needed. We leave it so keyboard users

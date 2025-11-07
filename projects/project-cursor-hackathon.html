@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Projects - ResumATE</title>
     <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/index.css">
     <script src="../javascript/index.js"></script>
 </head>
@@ -131,9 +131,11 @@
 
             <span>Intelligent Resume Optimization</span>
             <p>
-                At the core of ResumATE is an AI pipeline built on the <strong>OpenAI Agents SDK</strong> with GPT-4. 
-                The system uses the Agents SDK to create agent instances with configurable parameters (model, temperature, 
-                tools) for each API call. When a user submits a job description, the system doesn't just generate generic 
+                At the core of ResumATE is an AI pipeline built on the <strong>OpenAI Agents SDK</strong> with GPT-4.
+                The system uses the Agents SDK to create agent instances with configurable parameters (model,
+                temperature,
+                tools) for each API call. When a user submits a job description, the system doesn't just generate
+                generic
                 content, it performs contextual analysis using carefully engineered prompts.
             </p>
             <p>
@@ -145,7 +147,8 @@
             <ul>
                 <li><strong>Skill Selection:</strong> Analyzes the job description to select only relevant skills from
                     the user's master list, avoiding the common mistake of listing every skill regardless of relevance.
-                    Includes strict validation to prevent AI hallucination e.g. skills not in the database are rejected.</li>
+                    Includes strict validation to prevent AI hallucination e.g. skills not in the database are rejected.
+                </li>
                 <li><strong>Experience Prioritization:</strong> Ranks experiences by relevance score, selecting the top
                     2-3 that best match the target role. An experienced Python developer applying to a Python role won't
                     have their unrelated Java internship featured.</li>
@@ -155,10 +158,10 @@
                     and include quantifiable metrics (users served, time saved, performance improvements).</li>
             </ul>
             <p>
-                The system includes built-in quality controls. Each agent instance is created with tuned temperature 
-                settings (0.3 for analysis tasks, 0.5 for generation tasks) to balance creativity with consistency. 
-                The AI is explicitly instructed to avoid vague statements like "Developed applications using various 
-                technologies" in favor of specific, impactful bullets like "Built full-stack API using Python/FastAPI 
+                The system includes built-in quality controls. Each agent instance is created with tuned temperature
+                settings (0.3 for analysis tasks, 0.5 for generation tasks) to balance creativity with consistency.
+                The AI is explicitly instructed to avoid vague statements like "Developed applications using various
+                technologies" in favor of specific, impactful bullets like "Built full-stack API using Python/FastAPI
                 and PostgreSQL serving 10K+ users."
             </p>
 
@@ -176,7 +179,8 @@
             </ul>
             <p>
                 This context enables intelligent variation. If you already have a bullet about "database optimization,"
-                the AI won't generate another one but instead it will focus on different aspects like API development or deployment
+                the AI won't generate another one but instead it will focus on different aspects like API development or
+                deployment
                 automation. Each bullet point is distinct, relevant, and additive to the overall narrative.
             </p>
 
@@ -222,7 +226,8 @@
             <p>
                 When ready to apply for a job, users navigate to the <strong>Resume Tailor Page</strong>. They paste
                 the job description into a text area and click "Generate Resume." Within seconds, the AI returns a
-                tailored resume in the <strong>Resume Editor</strong> which is a live preview showing contact info, skills,
+                tailored resume in the <strong>Resume Editor</strong> which is a live preview showing contact info,
+                skills,
                 experiences, projects, and education. Each section is editable: users can add/remove skills, reorder
                 experiences, edit bullet points inline, or regenerate specific sections if they're not satisfied.
             </p>
@@ -259,8 +264,10 @@
             <span>Database Schema Evolution</span>
             <p>
                 Our initial schema was too simple, treating all resume items as generic "experiences" without
-                distinguishing work from projects or achievements. As we progressed, we realised this would not support the
-                nuanced presentation needed for quality resumes. Refactoring the schema during a hackathon is risky and costly, 
+                distinguishing work from projects or achievements. As we progressed, we realised this would not support
+                the
+                nuanced presentation needed for quality resumes. Refactoring the schema during a hackathon is risky and
+                costly,
                 but we made the call to implement the hybrid schema (<code>master_resume_items</code> with
                 <code>item_type</code> enum) to support proper categorization. This paid off in the final product but
                 cost us hours of migration and code updates.
@@ -277,7 +284,8 @@
             <p>
                 Managing state across the resume editing workflow was non-trivial. The <code>useResumes</code> hook grew
                 to over 300 lines, managing selected resume, loading states, error handling, and synchronization between
-                local edits and database saves. React's re-render behavior caused subtle bugs e.g. editing a bullet point
+                local edits and database saves. React's re-render behavior caused subtle bugs e.g. editing a bullet
+                point
                 would sometimes trigger a re-fetch, losing unsaved changes. We implemented optimistic updates (update
                 local state immediately, sync to backend in background) to maintain responsiveness, but this required
                 careful rollback logic when API calls failed.
@@ -285,16 +293,18 @@
 
             <span>Team Coordination & Communication</span>
             <p>
-                With three developers working in parallel, merge conflicts were inevitable. We divided work by roles 
-                (frontend, backend, AI) but found our components had more interdependencies than expected. 
-                One developer's changes to the resume data structure would break another's editor component. 
+                With three developers working in parallel, merge conflicts were inevitable. We divided work by roles
+                (frontend, backend, AI) but found our components had more interdependencies than expected.
+                One developer's changes to the resume data structure would break another's editor component.
             </p>
 
             <span>Physical & Mental Endurance</span>
             <p>
                 Coding continuously for 24 hours is physically demanding. Focus degrades significantly after hour 16, we
-                began making several silly bugs (typos in variable names, forgetting to await async functions) that would have
-                been obvious when fresh. The 2 AM to 6 AM stretch was more brutal than I anticipated and it was at razor's edge
+                began making several silly bugs (typos in variable names, forgetting to await async functions) that
+                would have
+                been obvious when fresh. The 2 AM to 6 AM stretch was more brutal than I anticipated and it was at
+                razor's edge
                 whether we could finish.
             </p>
 
@@ -303,20 +313,25 @@
             <span>Product-First Mindset: Vision Before Code</span>
             <p>
                 The most impactful lesson was adopting a product-first approach from the start. Instead of jumping
-                straight into coding, we should have spent a lot more hours whiteboarding the end-to-end user journey: Who is our
+                straight into coding, we should have spent a lot more hours whiteboarding the end-to-end user journey:
+                Who is our
                 user? (job seekers who apply to multiple positions) What pain are we solving? (time-consuming manual
                 resume tailoring) What does success look like? (generating a tailored resume in &lt;5 minutes).
             </p>
             <p>
-                This clarity could have prevented scope creep and gave a very focused vision. 
-                When someone suggested adding a "resume scoring dashboard," we could quickly ask: Does this serve our core value proposition? 
-                The answer was no nice-to-have, but not essential for MVP. <strong>A clear product vision is a forcing function for good technical
-                decisions.</strong> It tells you what to build, what to defer, and what to cut entirely.
+                This clarity could have prevented scope creep and gave a very focused vision.
+                When someone suggested adding a "resume scoring dashboard," we could quickly ask: Does this serve our
+                core value proposition?
+                The answer was no nice-to-have, but not essential for MVP. <strong>A clear product vision is a forcing
+                    function for good technical
+                    decisions.</strong> It tells you what to build, what to defer, and what to cut entirely.
             </p>
             <p>
-                Working backward from the desired outcome could also shape our architecture. Knowing we wanted instant resume
+                Working backward from the desired outcome could also shape our architecture. Knowing we wanted instant
+                resume
                 editing led us to implement optimistic updates in the frontend. Knowing we wanted context-aware bullet
-                points drove the decision to pass complete user history to the AI rather than just the target experience.
+                points drove the decision to pass complete user history to the AI rather than just the target
+                experience.
                 Product requirements drive technical requirements, not the other way around.
             </p>
 
@@ -324,10 +339,10 @@
             <p>
                 We learned that integrating AI effectively requires treating it like any other component: understanding
                 its capabilities, limitations, and failure modes. GPT-4 is powerful but not magical. It will produce
-                mediocre output if given mediocre instructions. The OpenAI Agents SDK provides a convenient wrapper for 
-                managing API calls, but the real intelligence comes from prompt engineering. The difference between 
-                "Generate bullet points for this experience" and our final prompt (which explicitly defines bullet 
-                structure, emphasizes metrics, provides examples, and includes existing context to avoid duplication) 
+                mediocre output if given mediocre instructions. The OpenAI Agents SDK provides a convenient wrapper for
+                managing API calls, but the real intelligence comes from prompt engineering. The difference between
+                "Generate bullet points for this experience" and our final prompt (which explicitly defines bullet
+                structure, emphasizes metrics, provides examples, and includes existing context to avoid duplication)
                 is night and day.
             </p>
             <p>
@@ -340,8 +355,8 @@
             <p>
                 Temperature tuning was another revelation. High temperature (0.7+) generates creative but inconsistent
                 output. Low temperature (0.2) is reliable but robotic. We use 0.3 for analysis (where consistency is
-                critical) and 0.5 for bullet generation (where some creativity helps). This nuance in treating different AI
-                tasks differently is something you only learn through experimentation.
+                critical) and 0.5 for bullet generation (where some creativity helps). This nuance in treating different
+                AI tasks differently is something you only learn through experimentation.
             </p>
 
             <span>Database Design Impacts Everything</span>
@@ -360,7 +375,8 @@
             </p>
             <p>
                 We also learned the value of normalization. Storing bullet points in a separate
-                <code>master_resume_item_points</code> table (rather than as a JSON array in <code>master_resume_items</code>)
+                <code>master_resume_item_points</code> table (rather than as a JSON array in
+                <code>master_resume_items</code>)
                 enabled powerful features like tracking <code>usage_count</code> per bullet and supporting multiple
                 curated resumes referencing the same master points. Proper relational modeling unlocks functionality you
                 don't realize you need until you need it.
@@ -370,7 +386,8 @@
             <p>
                 Our dual-backend architecture (Express + FastAPI) was the right call for this project, but it came with
                 costs: coordinating deployments, managing two codebases, debugging cross-service issues. We chose this
-                split because (1) Passport.js for OAuth is mature in Node, and (2) Python's AI ecosystem (<code>openai</code>
+                split because (1) Passport.js for OAuth is mature in Node, and (2) Python's AI ecosystem
+                (<code>openai</code>
                 SDK, <code>pydantic</code>) is superior to Node alternatives.
             </p>
             <p>
@@ -381,7 +398,8 @@
             </p>
             <p>
                 The key insight is <em>intentional separation</em>. Our Express backend knows nothing about AI
-                agents, it just proxies requests to <code>http://localhost:8000/api/...</code>. Our FastAPI backend knows
+                agents, it just proxies requests to <code>http://localhost:8000/api/...</code>. Our FastAPI backend
+                knows
                 nothing about users or sessions, it receives data and returns AI-generated content. This clean interface
                 boundary means we could swap out either backend independently (e.g., replace FastAPI with a different AI
                 service) without affecting the other. Coupling would have made this impossible.
@@ -390,11 +408,13 @@
             <span>State Management Requires Discipline</span>
             <p>
                 React's state management can spiral out of control quickly. Our <code>useResumes</code> hook became a
-                all-encompassing Object managing resumes list, selected resume, loading states, error handling, CRUD operations, and
+                all-encompassing Object managing resumes list, selected resume, loading states, error handling, CRUD
+                operations, and
                 API synchronization. This worked for the hackathon but is not sustainable for a production app.
             </p>
             <p>
-                We also learned the value of immutable updates. Mutating state directly (<code>resume.experiences.push(newExp)</code>)
+                We also learned the value of immutable updates. Mutating state directly
+                (<code>resume.experiences.push(newExp)</code>)
                 caused React to miss changes and skip re-renders. Using spread operators (<code>{ ...resume,
                 experiences: [...resume.experiences, newExp] }</code>) ensured React detected updates. This is
                 JavaScript 101, but under time pressure and fatigue, we made these mistakes and paid the debugging cost.
@@ -405,21 +425,21 @@
             <p>
                 Competing in a Cursor-sponsored hackathon gave us hands-on experience with AI-assisted coding. Cursor's
                 autocomplete and chat features accelerated boilerplate generation (API routes, database queries,
-                component scaffolding) significantly. Where we would normally spend 10 minutes writing a CRUD endpoint, 
-                Cursor generated it in 30 seconds. This multiplicative effect added up and we estimate AI tools saved us 
+                component scaffolding) significantly. Where we would normally spend 10 minutes writing a CRUD endpoint,
+                Cursor generated it in 30 seconds. This multiplicative effect added up and we estimate AI tools saved us
                 4-6 hours of typing over the 24-hour period.
             </p>
             <p>
                 However, AI-generated code requires vigilance. Cursor occasionally suggested plausible-but-wrong
-                patterns (e.g., accessing state properties that did not exist, or generating overly complicated UI). 
-                <strong>The lesson: treat AI suggestions like junior developer contributions i.e. always verify and 
-                understand before accepting.</strong> The speed gain is real, but it doesn't eliminate the need for 
+                patterns (e.g., accessing state properties that did not exist, or generating overly complicated UI).
+                <strong>The lesson: treat AI suggestions like junior developer contributions i.e. always verify and
+                    understand before accepting.</strong> The speed gain is real, but it doesn't eliminate the need for
                 understanding what the code does.
             </p>
             <p>
-                We also discovered effective prompt strategies for Cursor. Vague requests like "add error handling" 
-                produced generic try-catch blocks. Specific requests like "add error handling with user-friendly 
-                messages and rollback on failure" produced much better code. The same prompt engineering principles 
+                We also discovered effective prompt strategies for Cursor. Vague requests like "add error handling"
+                produced generic try-catch blocks. Specific requests like "add error handling with user-friendly
+                messages and rollback on failure" produced much better code. The same prompt engineering principles
                 that apply to GPT-4 apply to coding assistants specificity gets better results.
             </p>
 
@@ -427,8 +447,8 @@
             <p>
                 Time-constrained collaboration requires intentional communication. Early on, we had a problem:
                 developers would finish their tasks and start on new ones without telling anyone, leading to duplicate
-                work and conflicts. We should have instituted a simple rule: before starting any new feature, announce 
-                it in the group chat and wait for acknowledgment. This 30-second overhead could have prevented hours of 
+                work and conflicts. We should have instituted a simple rule: before starting any new feature, announce
+                it in the group chat and wait for acknowledgment. This 30-second overhead could have prevented hours of
                 wasted effort.
             </p>
             <p>
@@ -439,10 +459,10 @@
                 implementation mismatches later. Confirmation loops are worth the time.
             </p>
             <p>
-                We also learned the value of synchronous check-ins. Every 4 hours, we would stop coding for 15 minutes and
-                gather: What did everyone accomplish? Are there any blockers? Do interfaces match expectations? These
-                sessions caught integration issues early (e.g., frontend expecting <code>camelCase</code> while backend
-                returned <code>snake_case</code>) before they became merge-conflict nightmares.
+                We also learned the value of synchronous check-ins. Every 4 hours, we would stop coding for 15 minutes
+                and gather: What did everyone accomplish? Are there any blockers? Do interfaces match expectations?
+                These sessions caught integration issues early (e.g., frontend expecting <code>camelCase</code> while
+                backend returned <code>snake_case</code>) before they became merge-conflict nightmares.
             </p>
 
             <h2>Results</h2>
@@ -485,10 +505,13 @@
                     (FastAPI).
                 </li>
                 <li>
-                    <strong>Components:</strong> 25+ React components following ShadCN/Radix UI patterns for consistency.
+                    <strong>Components:</strong> 25+ React components following ShadCN/Radix UI patterns for
+                    consistency.
                 </li>
                 <li><strong>API Endpoints:</strong> 15+ REST endpoints across auth, resume CRUD, and AI generation.</li>
-                <li><strong>Database Tables:</strong> 8 tables with proper normalization, foreign keys, and indexes.</li>
+                <li>
+                    <strong>Database Tables:</strong> 8 tables with proper normalization, foreign keys, and indexes.
+                </li>
                 <li>
                     <strong>AI Integration:</strong> OpenAI Agents SDK with GPT-4, using tuned temperature parameters
                     (0.3-0.5) and carefully engineered prompts for resume optimization and analysis.
@@ -498,9 +521,10 @@
 
             <span>Hackathon Outcome</span>
             <p>
-                While we did not win the hackathon (we missed the submission deadline by mere seconds), 
-                the project succeeded in its primary goal: proving that AI can meaningfully accelerate a real-world pain 
-                point (resume tailoring) without replacing human judgment. Users remain in control, tweaking and approving
+                While we did not win the hackathon (we missed the submission deadline by mere seconds),
+                the project succeeded in its primary goal: proving that AI can meaningfully accelerate a real-world pain
+                point (resume tailoring) without replacing human judgment. Users remain in control, tweaking and
+                approving
                 AI suggestions rather than blindly accepting them.
             </p>
 
@@ -527,7 +551,8 @@
                 always available.
             </p>
 
-            <video id="resumate-video" tabindex="0" controls width="100%" style="border-radius: 8px;" poster="../imgs/resumATE.png">
+            <video id="resumate-video" tabindex="0" controls width="100%" style="border-radius: 8px;"
+                poster="../imgs/resumATE.png">
                 <source src="../videos/ResumATE.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
