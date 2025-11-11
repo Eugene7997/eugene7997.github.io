@@ -32,7 +32,9 @@ class Header extends HTMLElement {
                     <a href="${prefix}projects.html">Projects</a>&nbsp;
                     <a href="${prefix}blogs.html">Blogs</a>
                 </div>
-                <button class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">☾</button>
+                <button class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+                    <i class="fa fa-moon-o"></i>
+                </button>
             </div>
             <div class="border" />
         </nav>
@@ -46,16 +48,21 @@ class Header extends HTMLElement {
 
         // Theme toggle: persists to localStorage and updates `html` class
         function applyTheme(isDark) {
+            const icon = themeToggle?.querySelector('i');
             if (isDark) {
                 document.documentElement.classList.add('dark');
+                if (icon) {
+                    icon.className = 'fa fa-sun-o';
+                }
                 if (themeToggle) {
-                    themeToggle.textContent = '☀';
                     themeToggle.setAttribute('aria-pressed', 'true');
                 }
             } else {
                 document.documentElement.classList.remove('dark');
+                if (icon) {
+                    icon.className = 'fa fa-moon-o';
+                }
                 if (themeToggle) {
-                    themeToggle.textContent = '☾';
                     themeToggle.setAttribute('aria-pressed', 'false');
                 }
             }
@@ -129,7 +136,7 @@ class Footer extends HTMLElement {
         this.innerHTML = `    
     <footer>            
         <div class="footer">
-            <p><i>Last modified: 07/11/2025</i></p>
+            <p><i>Last modified: 11/11/2025</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
