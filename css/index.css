@@ -746,34 +746,21 @@ p {
     display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #121212;              /* Main background – neutral dark */
-        --text: #e5e5e5;            /* Primary text – soft white */
-        --muted: #9a9a9a;           /* Muted text – neutral gray */
-        --border: #3f3f3f;          /* Subtle border – slightly lighter muted for contrast */
-        --muted-light: #1a1a1a;     /* Slightly lighter dark section background */
-        --panel: #181818;           /* Panels or cards */
-        --panel-hover: #202020;     /* Hovered panels */
-        --hover-bg: #202020;        /* Hover background for items */
-        --dark: #f0f0f0;            /* Lightest text or icons */
-        --card-bg: #262626;         /* Card background */
-        --card-hover-bg: #2d2d2d;   /* Card hover background */
-        --muted-2: #6f6f6f;         /* Secondary muted text */
-        --focus-outline: #3a3a3a;   /* Outline for focus state */
-        --accent: #a0a0a0;          /* Accent – neutral gray */
-    }
 
-    .project-card {
-        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
-    }
+/* Dark mode overrides for specific elements */
+html.dark .project-card {
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
+}
 
-    .project-desc,
-    .project-tech {
-        color: var(--muted-light);
-    }
+html.dark .project-desc,
+html.dark .project-tech {
+    color: var(--muted-light);
+}
 
-    .project-links a {
-        color: var(--accent);
-    }
+html.dark .project-links a {
+    color: var(--accent);
+}
+
+html.dark .blog-card {
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
 }
