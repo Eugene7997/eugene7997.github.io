@@ -752,11 +752,6 @@ html.dark .project-card {
     box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
 }
 
-html.dark .project-desc,
-html.dark .project-tech {
-    color: var(--muted-light);
-}
-
 html.dark .project-links a {
     color: var(--accent);
 }
