@@ -906,6 +906,37 @@ p {
     }
 }
 
+/* Code element styling: inline `code` and block `pre` */
+code,
+pre code {
+    background: var(--panel);
+    color: var(--dark);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Segoe UI Mono', 'Roboto Mono', 'Helvetica Neue', monospace;
+    font-size: 0.95em;
+    border-radius: 6px;
+}
+
+code {
+    color: rgb(255, 28, 65);
+    padding: 0.15rem 0.4rem;
+    line-height: 1.25;
+}
+
+pre {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow: auto;
+    margin: 1rem 0;
+}
+
+/* Ensure dark mode adapts via CSS variables */
+html.dark code,
+html.dark pre {
+    background: var(--card-bg);
+}
+
 /* Dark mode overrides for specific elements */
 html.dark .project-card {
     box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
