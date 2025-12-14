@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vidrpy — Project Details</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../javascript/index.js"></script>
+</head>
+
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>Vidrpy</h1>
+        <p class="lead">A mini project to create a simple AP web video recorder app done over a few weeks.</p>
+
+        <section class="detail-hero">
+            <img src="../imgs/vidrpy_hero.png" alt="Screenshot of vidrpy main page">
+        </section>
+
+        <section class="detail-body">
+            <h2>Overview</h2>
+            <p>Vidrpy is a resilient video recording and management web application designed to work seamlessly both online and offline. Built with a focus on availability under network disruption, the app allows users to record videos from their webcam, automatically sync them to the cloud when connectivity is available, and manage their video library with features like playback, renaming, and deletion. The application uses IndexedDB for local storage, ensuring recorded videos are never lost even when the server is unreachable.</p>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/Eugene7997/Vidrpy" target="_blank" rel="noopener">
+                    View source on GitHub
+                </a>
+                <a class="btn ghost" href="https://vidrpy.vercel.app" target="_blank" rel="noopener">Live demo</a>
+            </p>
+            <div>
+                <h3>Features</h3>
+                <ul>
+                    <li><strong>Webcam Recording:</strong> Record videos directly from your browser with real-time timer and preview.</li>
+                    <li><strong>Offline-First Architecture:</strong> Videos are saved locally in IndexedDB and automatically sync when online.</li>
+                    <li><strong>Google OAuth Authentication:</strong> Secure user authentication using Google Sign-In.</li>
+                    <li><strong>Smart Sync Service:</strong> Background sync with retry logic, progress tracking, and conflict resolution.</li>
+                    <li><strong>Video Management:</strong> View, play, rename, and delete videos with real-time status indicators.</li>
+                    <li><strong>Upload Progress Tracking:</strong> Visual feedback with percentage and size information during uploads.</li>
+                    <li><strong>AP Mode Support:</strong> Application continues to function when backend server is unavailable.</li>
+                    <li><strong>Status Indicators:</strong> Clear visual feedback for synced, pending, uploading, and failed states.</li>
+                </ul>
+                <h3>Tech stack</h3>
+                <p>React • TypeScript • TailwindCSS • FastAPI • SQLAlchemy • psycopg2 • PostgreSQL • Supabase S3 compatible object bucket</p>
+            </div>
+            <h2>Problem Statement</h2>
+            <p>
+                Web apps usually break when the network disappears and video apps break the worst e.g. lost uploads, no recording. The challenge was to build a video recording application that prioritizes availability and data persistence, ensuring users can always record videos and have them automatically sync when connectivity is restored. It was a fun way to get hands on in AP systems and web videos.
+            </p>
+            <h2>Solution</h2>
+            <p>
+                I implemented an offline-first architecture using IndexedDB for local video storage and a background sync service that continuously monitors connectivity and processes pending operations. The frontend React application records videos using the MediaRecorder API, immediately saves them to IndexedDB with metadata, and queues upload operations to the server.
+            </p>
+            <p>
+                The FastAPI backend provides RESTful endpoints for video management, user authentication via Google OAuth, and integrates with Supabase for S3-compatible object storage. Videos are stored in PostgreSQL with SQLAlchemy ORM, tracking upload status, retry counts, and cloud paths. The sync service implements exponential backoff for failed uploads and handles edge cases like duplicate operations and stale data.
+            </p>
+            <p>
+                To enhance user experience, I added real-time upload progress tracking, visual status indicators (synced, pending, uploading, failed), and graceful degradation when the backend is unavailable. The application can operate in "AP mode" where authenticated users can continue recording and managing videos locally, with automatic sync resuming when connectivity is restored.
+            </p>
+
+            <h2>Challenges Faced</h2>
+            <ul>
+                <li><strong>IndexedDB Complexity:</strong> Working with IndexedDB's asynchronous API and managing video blobs required careful handling of promises and transactions. Ensuring data consistency between local and server state was non-trivial.</li>
+                <li><strong>Sync Logic:</strong> Implementing reliable background sync with proper conflict resolution, duplicate operation handling, and retry logic took significant iteration. Edge cases like rapid renames or deletes during uploads required special attention.</li>
+                <li><strong>CORS and Authentication:</strong> Configuring CORS properly for Google OAuth and handling token expiration while maintaining offline functionality required careful state management.</li>
+                <li><strong>State Management:</strong> Keeping UI state synchronized with IndexedDB state, pending operations, and server state across multiple components required a robust event listener system.</li>
+            </ul>
+
+            <h2>Lessons Learned</h2>
+            <ul>
+                <li><strong>Offline-First is Hard:</strong> Building truly resilient offline-first applications requires thinking about state management, conflict resolution, and edge cases from day one. It's significantly more complex than traditional client-server architectures.</li>
+                <li><strong>Web API Maturity:</strong> Working with the MediaRecorder and MediaDevices APIs highlighted how mature and capable modern Web APIs are for handling real-time video recording.</li>
+                <li><strong>IndexedDB is Powerful but Verbose:</strong> IndexedDB provides excellent capabilities for storing large blobs, but the API is verbose. Wrapping it in a clean service layer was essential for maintainability.</li>
+                <li><strong>Testing Offline Scenarios:</strong> Properly testing offline behavior, network interruptions, and sync conflicts required creative approaches like throttling network speeds and simulating server downtime.</li>
+                <li><strong>Scope Management:</strong> Initially planned for one week, the project expanded to several weeks. Breaking down features into MVPs and deferring nice-to-haves like pagination and filtering was crucial for completion.</li>
+            </ul>
+
+            <h2>Results</h2>
+            <p>
+                The final application successfully achieves its core goal which is to have resilient video recording that works offline. Users can record videos without worrying about connectivity, and the sync service reliably uploads them when online.
+            </p>
+            <p>
+                This project deepened my understanding of browser APIs (MediaRecorder, IndexedDB), offline-first architecture patterns, and the complexities of building resilient distributed systems. It also reinforced the importance of user feedback mechanisms and graceful degradation in web applications.
+            </p>
+        </section>
+    </main>
+    <main-footer></main-footer>
+</body>
+
+</html>.
