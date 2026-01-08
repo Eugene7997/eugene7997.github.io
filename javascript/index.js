@@ -136,7 +136,7 @@ class Footer extends HTMLElement {
         this.innerHTML = `    
     <footer>            
         <div class="footer">
-            <p><i>Last modified: 14/12/2025</i></p>
+            <p><i>Last modified: 08/01/2026</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
@@ -324,5 +324,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
             scrollAndFocus(target, { offset, autoplay });
         });
+    });
+});
+
+// Carousel functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('.carousel-container');
+    
+    carousels.forEach(container => {
+        const carousel = container.querySelector('.carousel');
+        const images = carousel.querySelectorAll('.carousel-image');
+        const prevBtn = container.querySelector('.carousel-btn-prev');
+        const nextBtn = container.querySelector('.carousel-btn-next');
+        const indicatorsContainer = container.querySelector('.carousel-indicators');
+        
+        let currentIndex = 0;
+        
+        // Create indicator dots
+        images.forEach((_, index) => {
+            const indicator = document.createElement('button');
+            indicator.classList.add('carousel-indicator');
+            indicator.setAttribute('aria-label', `Go to image ${index + 1}`);
+            if (index === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => goToSlide(index));
+            indicatorsContainer.appendChild(indicator);
+        });
+        
+        const indicators = indicatorsContainer.querySelectorAll('.carousel-indicator');
+        
+        function updateCarousel() {
+            images.forEach((img, index) => {
+                img.classList.toggle('active', index === currentIndex);
+            });
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+        
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+        
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateCarousel();
+        }
+        
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        
+        // Keyboard navigation
+        container.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+        });
+        
+        // Optional: Auto-play (uncomment if desired)
+        // setInterval(nextSlide, 5000);
     });
 });
