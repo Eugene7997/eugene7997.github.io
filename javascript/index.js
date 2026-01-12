@@ -385,6 +385,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'ArrowRight') nextSlide();
         });
         
+        // Standardize carousel height based on tallest image
+        const promises = Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => img.onload = resolve);
+        });
+        
+        Promise.all(promises).then(() => {
+            const carouselWidth = carousel.offsetWidth;
+            let maxHeight = 0;
+            images.forEach(img => {
+                const aspectRatio = img.naturalHeight / img.naturalWidth;
+                const height = aspectRatio * carouselWidth;
+                maxHeight = Math.max(maxHeight, height);
+            });
+            const maxCarouselHeight = window.innerWidth <= 768 ? 350 : 550;
+            const finalHeight = Math.min(maxHeight, maxCarouselHeight);
+            carousel.style.height = finalHeight + 'px';
+            images.forEach(img => {
+                img.style.height = finalHeight + 'px';
+            });
+        });
+        
         // Optional: Auto-play (uncomment if desired)
         // setInterval(nextSlide, 5000);
     });

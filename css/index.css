@@ -949,3 +949,99 @@ html.dark .project-links a {
 html.dark .blog-card {
     box-shadow: 0 6px 18px rgba(2, 6, 23, 0.7);
 }
+
+/* Carousel styles */
+.carousel-container {
+    position: relative;
+    height: max-content;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--bg);
+}
+
+.carousel-image {
+    display: none !important;
+    width: 100%;
+    object-fit: contain;
+}
+
+.carousel-image.active {
+    display: block !important;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-btn-prev {
+    left: 10px;
+}
+
+.carousel-btn-next {
+    right: 10px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carousel-indicator {
+    width: 10px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.carousel-indicator.active {
+    background: rgba(255, 255, 255, 1);
+}
+
+.carousel-indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark mode adjustments */
+html.dark .carousel-btn {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+html.dark .carousel-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
