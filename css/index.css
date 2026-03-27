@@ -1045,3 +1045,12 @@ html.dark .carousel-btn {
 html.dark .carousel-btn:hover {
     background: rgba(255, 255, 255, 0.4);
 }
+
+.iframe-container {
+    position: relative;
+    height: max-content;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

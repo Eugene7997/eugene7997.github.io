@@ -136,7 +136,7 @@ class Footer extends HTMLElement {
         this.innerHTML = `    
     <footer>            
         <div class="footer">
-            <p><i>Last modified: 14/02/2026</i></p>
+            <p><i>Last modified: 27/03/2026</i></p>
             <p>The current date is: <current-date></current-date></p>
         </div>
     </footer>     
