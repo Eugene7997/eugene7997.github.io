@@ -588,11 +588,12 @@ p {
 }
 
 .project-links a {
+    color: var(--dark);
+    text-decoration: underline;
+    transition: background-color;
     margin-top: 2rem;
     text-align: center;
     font-size: 0.95rem;
-    color: var(--dark);
-    text-decoration: underline;
 }
 
 .project-links a:hover {
