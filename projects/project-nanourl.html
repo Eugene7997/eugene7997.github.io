@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NanoURL - Project Details</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../javascript/index.js"></script>
+</head>
+
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>NanoURL</h1>
+        <p class="lead">
+            A URL shortener built with Spring Boot, featuring a REST API,
+            a Thymeleaf/HTMX web UI.
+        </p>
+
+        <section class="detail-hero">
+            <img src="../imgs/nanourl_hero.png" alt="NanoURL screenshot" width="100%"
+                style="border-radius: 8px;">
+        </section>
+
+        <section class="detail-body">
+            <h2>Overview</h2>
+            <p>
+                NanoURL converts long URLs into compact 7 character codes that redirect to the original 
+                destination. Users can shorten a link, optionally assign a custom alias, and set an expiry 
+                window. All through either a clean web interface or a documented REST API.
+                Every redirect registers a hit counter atomically, making the stats accurate even under
+                heavy concurrent traffic.
+            </p>
+            <p>
+                The backend is built on Spring Boot 4 with Spring Data JPA and Hibernate Validator.
+                The frontend is a single Thymeleaf page that uses HTMX for form submissions and
+                Hyperscript for small UI interactions, delivering a snappy experience without a 
+                JavaScript framework.
+                H2 in-memory database is used for local development and PostgreSQL on Supabase for 
+                production, with the application containerised via Docker and deployed on Railway.
+            </p>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/Eugene7997/nanourl" target="_blank" rel="noopener">
+                    View source on GitHub
+                </a>
+                <a class="btn" href="https://nurl.up.railway.app/" target="_blank" rel="noopener">
+                    Live demo
+                </a>
+            </p>
+            <div>
+                <h3>Features</h3>
+                <ul>
+                    <li>
+                        <strong>URL Shortening:</strong> Generates cryptographically random 7 character Base62 codes
+                        with roughly 3.5 trillion possible values, making accidental collisions negligible.
+                    </li>
+                    <li>
+                        <strong>Custom Aliases:</strong> Users can claim a memorable alias (3 to 32 characters,
+                        <code>[A-Za-z0-9_]</code>) instead of a generated code.
+                    </li>
+                    <li>
+                        <strong>Link Expiry:</strong> Optional expiry window of 1 to 365 days.
+                        Expired links return 404 and are filtered out at lookup time.
+                    </li>
+                    <li>
+                        <strong>Atomic Hit Counting:</strong> Every redirect increments the hit counter with a single
+                        JPQL <code>UPDATE ... SET hits = hits + 1</code> statement, eliminating lost updates under
+                        concurrent requests.
+                    </li>
+                    <li>
+                        <strong>REST API with OpenAPI Docs:</strong> Full CRUD-style API documented with springdoc-openapi
+                        and browsable at <code>/swagger-ui.html</code>.
+                    </li>
+                    <li>
+                        <strong>HTMX Web UI:</strong> Form submissions and lookups return server-rendered
+                        Thymeleaf fragments that HTMX swaps into the page. No full-page reload, no client-side routing.
+                    </li>
+                    <li>
+                        <strong>URL Normalisation:</strong> Bare hostnames like <code>example.com</code> automatically
+                        get an <code>https://</code> prefix. Non-HTTP(S) schemes are rejected.
+                    </li>
+                    <li>
+                        <strong>Global Exception Handling:</strong> A <code>@RestControllerAdvice</code> maps
+                        validation failures and business rule violations to clean 400 responses with descriptive messages.
+                    </li>
+                </ul>
+                <h3>Tech stack</h3>
+                <p>
+                    Java 25 • Spring Boot 4 • Spring Data JPA • Hibernate Validator • Lombok •
+                    Thymeleaf • HTMX • Hyperscript • springdoc-openapi •
+                    PostgreSQL (prod) • H2 (dev) • Supabase • Docker • Railway •
+                    JUnit 5 • Mockito • AssertJ
+                </p>
+            </div>
+
+            <h2>Problem Statement</h2>
+            <p>
+                I struggled to find projects to get into the Java Spring boot headspace. Most of my
+                projects can be done via NextJS alone. But I wanted to do projects with spring boot
+                to consolidate my skills in Spring boot. This is where a URL shortener comes into play.
+                A URL shortener looks trivial on the surface i.e. Store a mapping, look it up, redirect.
+            </p>
+            <p>
+                But its actually complex enough for a complete backend implementation. 
+                For example, how do you count hits accurately when dozens of requests arrive for the 
+                same link at once? How do you guarantee code uniqueness without introducing a race 
+                condition between the existence check and the insert?
+                And how do you keep the codebase correct as it grows, so that subtle bugs
+                introduced in one layer don't silently survive all the way to production?
+            </p>
+            <p>
+                The goal was to build a URL shortener that is not just functional but genuinely correct
+                but one where the concurrency story is thought through, the validation is airtight, 
+                and every design decision can be justified.
+            </p>
+
+            <h2>Solution</h2>
+            <p>
+                Short codes are generated by <code>Base62.randomCode()</code>, which seeds a
+                <code>SecureRandom</code> byte buffer and encodes it via BigInteger arithmetic into the
+                <code>[0-9A-Za-z]</code> alphabet. Using <code>SecureRandom</code> rather than
+                <code>ThreadLocalRandom</code> ensures the output is unpredictable which is important 
+                when codes double as the sole access control for a link.
+            </p>
+            <p>
+                Code uniqueness is enforced by the database, not by an application-level pre-check.
+                <code>UrlService.create()</code> attempts to save directly and catches
+                <code>DataIntegrityViolationException</code> on the unique constraint. For generated codes
+                it retries up to ten times with a fresh code. For custom aliases it surfaces the collision
+                immediately as a 400. This eliminates the time-of-check/time-of-use (TOCTOU) window
+                that would exist if the code checked <code>existsByCode</code> before inserting.
+            </p>
+            <p>
+                Hit registration uses an atomic JPQL update, 
+                <code>UPDATE ShortUrl SET hits = hits + 1, lastAccessedAt = :now WHERE code = :code</code> 
+                rather than a read-modify-write cycle. The query carries <code>@Modifying(clearAutomatically = true)</code>
+                so the JPA first-level cache is invalidated after the update, and <code>@Transactional</code>
+                directly on the repository method ensures a transaction is always present.
+            </p>
+            <p>
+                The web UI is driven entirely by HTMX. The shorten and lookup forms post to
+                <code>PageController</code>, which returns Thymeleaf partial fragments
+                (<code>fragments/results :: shorten-result</code>, <code>lookup-result</code>,
+                <code>error-result</code>) that HTMX swaps into the page. Hyperscript handles the
+                small UI details like disabling the submit button during a request and toggling the
+                optional-settings panel, keeping the HTML declarative without reaching for a framework.
+            </p>
+
+            <h2>Challenges Faced</h2>
+            <ul>
+                <li>
+                    <strong>Concurrency in Hit Counting:</strong> The first implementation loaded the entity,
+                    incremented <code>hits</code> in Java, and saved it back. Under concurrent requests this
+                    is a classic read-modify-write race: two threads read the same value, both increment it,
+                    and the last write wins. Recognising the problem meant switching to a single
+                    atomic database operation and auditing the rest of the codebase for the same pattern.
+                </li>
+                <li>
+                    <strong>TOCTOU on Code Uniqueness:</strong> The original code used <code>existsByCode</code>
+                    to check availability before saving. Between the check and the insert another request
+                    could claim the same code, making the check useless as a guarantee. Moving the authority
+                    to the database constraint and handling the violation at the save site solved
+                    both the race and the excess round-trips.
+                </li>
+                <li>
+                    <strong>JPA Cache Staleness After Bulk Updates:</strong> A <code>@Modifying</code> JPQL update
+                    bypasses the JPA first-level cache. Without <code>clearAutomatically = true</code>,
+                    entities loaded earlier in the same session would show stale hit counts. A silent correctness
+                    bug that only surfaces under specific access patterns.
+                </li>
+                <li>
+                    <strong>Layered Validation:</strong> Bean Validation on the DTO and business-rule checks in the
+                    service can duplicate effort or, worse, contradict each other. The alias pattern
+                    (<code>^[A-Za-z0-9_]{3,32}$</code>) needed to live in one canonical place and be
+                    referenced consistently so that no invalid input could slip through one layer and
+                    fail unexpectedly in another.
+                </li>
+                <li>
+                    <strong>Correct HTTP Semantics:</strong> Small details like returning 201 Created with a
+                    <code>Location</code> header on resource creation, and typing the <code>map()</code>
+                    lambda correctly for <code>ResponseEntity&lt;Void&gt;</code>, required deliberate attention.
+                    These are easy to overlook but matter to any client that follows the spec.
+                </li>
+                <li>
+                    <strong>Railway Deployment Without a Dockerfile:</strong> Railway's buildpack
+                    auto-detection failed to build the Spring Boot application, producing a deployment
+                    error with no clear fix in the platform settings. Writing an explicit multi-stage
+                    Dockerfile using <code>eclipse-temurin:25-jdk</code> to compile and
+                    <code>eclipse-temurin:25-jre</code> as the slim runtime image resolved the issue
+                    and gave full control over the build environment.
+                </li>
+            </ul>
+
+            <h2>Lessons Learned</h2>
+            <ul>
+                <li>
+                    <strong>The Database is the Authority on Uniqueness:</strong> Pre-checking availability
+                    before inserting feels safe but creates a TOCTOU gap. The correct pattern is to attempt
+                    the insert, let the constraint enforce uniqueness, and handle the violation explicitly.
+                    This is simpler, faster, and actually correct.
+                </li>
+                <li>
+                    <strong>Never Update a Counter with a Read-Modify-Write:</strong> Any field incremented
+                    under concurrent load must be updated with a single atomic database statement.
+                    A read-modify-write cycle looks correct in single-threaded tests and fails silently
+                    in production which makes it particularly dangerous.
+                </li>
+                <li>
+                    <strong>JPA Abstractions Have Sharp Edges:</strong> <code>@Modifying</code> queries
+                    bypass the first-level cache, and <code>@Transactional</code> is not automatically
+                    inherited from the repository interface. Understanding what the framework does not
+                    do for you is as important as knowing what it does.
+                </li>
+                <li>
+                    <strong>Validate at the Right Layer:</strong> Bean Validation on the DTO is the first
+                    line of defence and the right place for format and range checks. Business rules
+                    like alias availability belong in the service. Duplicating either in the wrong layer
+                    produces dead code or contradictions.
+                </li>
+                <li>
+                    <strong>Explicit Dockerfiles Beat Buildpack Magic:</strong> Platform auto-detection
+                    is convenient until it fails with an opaque error. Writing a Dockerfile takes
+                    minutes and pays back immediately in reproducibility as the same image that passes
+                    local testing is exactly what runs in production.
+                </li>
+                <li>
+                    <strong>Code Review Surfaces Subtle Bugs:</strong> Several of the most consequential
+                    issues in this project e.g. the race condition, the TOCTOU gap, the stale cache were
+                    not visible in unit tests and only surfaced during a structured code review, reinforcing
+                    that testing and review are complementary disciplines. Tests verify behaviour,
+                    review catches design level correctness.
+                </li>
+            </ul>
+
+            <h2>Results</h2>
+            <p>
+                NanoURL delivers a correct, well-tested implementation of a URL shortener that holds up
+                under concurrent load. The hit counter is accurate, code uniqueness is guaranteed by the
+                database, expired links are cleanly filtered, and the API follows HTTP conventions.
+                The test suite covers the service, repository, and controller layers with a mix of
+                unit tests (Mockito + AssertJ) and slice tests (<code>@DataJpaTest</code>, MockMvc).
+            </p>
+            <p>
+                Building this project sharpened my understanding of JPA transaction and cache semantics,
+                correct concurrency patterns in a relational database context, and what it means to
+                design an API that is predictable for its clients.
+            </p>
+        </section>
+    </main>
+    <main-footer></main-footer>
+</body>
+
+</html>
