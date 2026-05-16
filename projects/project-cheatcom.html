@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Cheatcom - Project Details</title>
+    <link rel="icon" href="../imgs/icon.svg" type="image/x-icon">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/index.css">
+        <script src="../javascript/index.js"></script>
+</head>
+
+<body>
+    <main-header></main-header>
+    <main class="project-detail" id="content">
+        <a class="back-link" href="../projects.html">← Back to projects</a>
+        <h1>Cheatcom</h1>
+        <p class="lead">
+            A small personal CLI interactive cheatsheet in Go.
+        </p>
+
+        <section class="detail-hero">
+            <img src="../imgs/cheatcom_hero.png" alt="Cheatcom screenshot" width="100%"
+                style="border-radius: 8px;">
+        </section>
+
+        <section class="detail-body">
+            <h1>Overview</h1>
+            <p class="project-actions">
+                <a class="btn" href="https://github.com/Eugene7997/cheatcom" target="_blank" rel="noopener">
+                    View source on GitHub
+                </a>
+            </p>
+            <h2>Problem statement</h2>
+            <p>
+                You run that Docker command every few weeks. You know roughly what it does.
+                But the flags? Gone. So you open a new terminal tab, type
+                <code>history | grep docker</code>, scroll through fifty unrelated entries,
+                and eventually give up and Google it again.
+            </p>
+            <p>
+                That moment happens to me constantly. After the fifth time searching for the
+                same <code>gst-launch-1.0 ...</code> invocation, I decided to build something that
+                actually solves the problem rather than work around it forever.
+            </p>
+
+            <h2>Why the existing tools do not cut it</h2>
+            <p>
+                I looked at what I was already using and why none of it was satisfying:
+            </p>
+            <ul>
+                <li>
+                    <code>history | grep</code>. This sorts by when you last typed something,
+                    not by what it means. If you have not run the command recently, it is buried.
+                    And if you use multiple machines or sessions, the history is fragmented.
+                </li>
+                <li>
+                    <strong>Notes apps and Notion</strong>. They require a full context switch.
+                    Open the app, search for the page, find the command, copy it back to your
+                    terminal. That is like five steps for something that should take one.
+                </li>
+                <li>
+                    <strong>tldr and man</strong>. These are excellent for learning a tool for
+                    the first time. They are not useful for recalling your own personal invocations,
+                    the exact flag combination you settled on after trial and error, or the
+                    command that works in your specific environment.
+                </li>
+            </ul>
+            <p>
+                The gap requires something personal, searchable, and instantly actionable. Which 
+                inspired me to try my hand building an custom CLI app, Cheatcom.
+            </p>
+
+            <h2>What cheatcom does</h2>
+            <p>
+                The workflow is simple. When you figure out a command worth keeping, you save it:
+            </p>
+
+            <pre><code>$ chc add "lsof -i :80" -d "find process on port" -t networking
+$ chc add "git log --oneline --graph --decorate --all" -d "pretty git log" -t git</code></pre>
+
+            <p>
+                When you need it back, you just type <code>chc</code>. A fuzzy-searchable list
+                opens in the terminal. You type a few letters of the description or command,
+                arrow down, and press Enter. The command is copied to your clipboard, ready to
+                paste. The whole interaction takes about two seconds.
+            </p>
+            <p>
+                The binary works the same on Windows, macOS, and Linux. Cheats are stored as
+                plain YAML in your platform's config directory, so you can back them up, version
+                control them, or sync them across machines with Dropbox.
+            </p>
+
+            <h2>Why Go</h2>
+            <p>
+                Before writing a single line, I spent time comparing languages. This was a
+                deliberate research step, not a default choice.
+            </p>
+            <ul>
+                <li>
+                    <strong>Python and shell scripts</strong> - Quick to write, but distributing a
+                    Python CLI cleanly means either assuming the right Python version and
+                    dependencies are already installed, or bundling a self-contained executable with
+                    something like PyInstaller. Neither option produces the clean, portable binary I
+                    wanted.
+                </li>
+                <li>
+                    <strong>JavaScript and Node.js</strong> - I know it well, but the CLI
+                    ecosystem felt overcomplicated for this scope. The toolchain overhead,
+                    bundling requirements, and startup latency all pointed away from it.
+                </li>
+                <li>
+                    <strong>Rust</strong> - Appealing for performance and its single-binary output.
+                    But the learning curve is steep, compile times are long during development, and
+                    the cognitive overhead felt out of proportion to the problem.
+                </li>
+                <li>
+                    <strong>Go</strong> - This hit the right balance. Readable syntax. Fast
+                    compilation. A single static binary with no runtime dependency. Strong standard
+                    library. And a CLI ecosystem that made the common problems easy without
+                    requiring complex abstractions.
+                </li>
+            </ul>
+            <p>
+                Go also turned out to be a genuinely well-designed language to work in day-to-day.
+                The well designed simplicity creates clarity. There are very few ways to do the 
+                same thing, which makes code easy to read and maintain. Compared to the JavaScript
+                projects I have worked on, Go felt reassuringly calm.
+            </p>
+            <h2>Learning from others</h2>
+            <p>
+                Given my limited Go experience at the time, I did not want to guess at what
+                idiomatic Go CLI code looked like. So before writing much, I read through two
+                production-quality open source CLI tools like
+                <span class="project-links"><a href="https://github.com/ankitpokhrel/jira-cli" target="_blank" rel="noopener">jira-cli</a></span>
+                <span class="project-links"><a href="https://github.com/jesseduffield/lazygit" target="_blank" rel="noopener">lazygit</a></span>
+                to study how experienced Go developers structure real projects. E.g. package layout,
+                error handling conventions, how they wire Cobra commands together, and how they
+                separate concerns between the CLI layer and business logic. That turned out to be
+                more valuable than most tutorial.
+            </p>
+            <p>A few things that landed directly in the code:</p>
+            <p>
+                <strong>A seven-line entry point</strong>, for the entire <code>main.go</code> is:
+            </p>
+            <pre><code><span class="kw">package</span> main
+
+<span class="kw">import</span> <span class="str">"github.com/Eugene7997/cheatcom/internal/cmd"</span>
+
+<span class="kw">func</span> <span class="fn">main</span>() {
+        cmd.<span class="fn">Execute</span>()
+}</code></pre>
+            <p>
+                All logic lives under <code>internal/</code>. The entry point is a stub, a pattern
+                borrowed directly from how jira-cli and lazygit structure their binaries.
+            </p>
+            <p>
+                <strong>One file per subcommand.</strong> Each command registers itself via
+                <code>init()</code>, so <code>root.go</code> never grows into a sprawling switch
+                statement. Here is <code>rm.go</code> in full:
+            </p>
+            <pre><code><span class="kw">var</span> rmCmd = &amp;cobra.Command{
+        Use:          <span class="str">"rm &lt;id&gt;"</span>,
+        Short:        <span class="str">"Remove a cheat by ID"</span>,
+        Args:         cobra.<span class="fn">ExactArgs</span>(<span class="num">1</span>),
+        RunE:         runRm,
+        SilenceUsage: <span class="kw">true</span>,
+}
+
+<span class="kw">func</span> <span class="fn">init</span>() { rootCmd.<span class="fn">AddCommand</span>(rmCmd) }</code></pre>
+            <p>
+                <strong>The TUI never touches the store.</strong> The interactive list returns a
+                plain <code>Result</code> struct to the caller. The <code>cmd</code> layer decides
+                what to do with it i.e. copy, run, or print. This decoupling makes the TUI easy to
+                reason about and keeps side effects out of presentation code.
+            </p>
+            <pre><code><span class="kw">type</span> <span class="ty">Result</span> <span class="kw">struct</span> {
+        Cheat     store.<span class="ty">Cheat</span>
+        Action    action.<span class="ty">Action</span>
+        Cancelled <span class="ty">bool</span>
+}</code></pre>
+
+            <h2>The ecosystem: Cobra, Viper, and Bubble Tea</h2>
+            <p>
+                Three libraries did most of the heavy lifting:
+            </p>
+            <p>
+                <strong>Cobra</strong> handles the subcommand structure and flag parsing. Writing
+                <code>chc add</code>, <code>chc list</code>, <code>chc rm</code> all drops into
+                place with almost no boilerplate. Cobra's design matches how CLI tools actually
+                grow: you add commands one at a time and they compose naturally.
+            </p>
+            <p>
+                <strong>Viper</strong> manages configuration and YAML persistence. It reads the
+                cheats file, deserializes the data, and provides the config values throughout the
+                app. For writes I skipped Viper's built-in helpers entirely since they are not
+                crash-safe. Instead I wrote persistence manually using an atomic write pattern:
+                serialize to a temp file, sync to disk, then rename into place. On Linux and macOS,
+                <code>os.Rename</code> is guaranteed atomic by POSIX. On Windows, it is effectively
+                atomic when both files are on the same volume, which the code ensures by creating
+                the temp file in the same directory as the destination:
+            </p>
+
+            <pre><code><span class="cm">// Write to a temp file in the same directory, then rename.</span>
+<span class="cm">// os.Rename is atomic on most filesystems, so the file is</span>
+<span class="cm">// never in a half-written state.</span>
+<span class="kw">func</span> <span class="fn">(s *Store) Save</span>() <span class="ty">error</span> {
+        data, _ := yaml.<span class="fn">Marshal</span>(fileFormat{Version: <span class="num">1</span>, Cheats: s.cheats})
+
+        tmp, _ := os.<span class="fn">CreateTemp</span>(dir, <span class="str">"cheats-*.yaml.tmp"</span>)
+        tmp.<span class="fn">Write</span>(data)
+        tmp.<span class="fn">Sync</span>()
+        tmp.<span class="fn">Close</span>()
+
+        <span class="kw">return</span> os.<span class="fn">Rename</span>(tmp.<span class="fn">Name</span>(), s.path)
+}</code></pre>
+
+            <p>
+                <strong>Bubble Tea</strong> (from Charmbracelet) powers the interactive TUI. It
+                uses an Elm-style architecture: a model holds state, an update function handles
+                input events, and a view function renders the current state as a string. Writing
+                the fuzzy list and the edit form in Bubble Tea was surprisingly ergonomic. The
+                framework handles terminal resize, key events, and rendering in a clean, testable
+                model.
+            </p>
+
+            <h2>Shipping it: GoReleaser and semantic versioning</h2>
+            <p>
+                Once the app was ready, I began to see how I could ship it.
+            </p>
+            <p>
+                <strong>GoReleaser</strong> solved the multi-platform build problem neatly. With
+                one config file, it builds binaries for Windows, macOS, and Linux across
+                x86_64, arm64, and i386. Eight combinations in total. It creates archives, and
+                publishes a GitHub release. The archives section is small enough to read in thirty
+                seconds:
+            </p>
+
+            <pre><code>builds:
+  - main: ./cmd/cheatcom
+    binary: chc
+    goos:   [linux, windows, darwin]
+    goarch: [arm64, amd64, "386"]
+
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+nfpms:
+  - formats: [deb]</code></pre>
+
+            <p>
+                I also learned about proper semantic versioning during this project, 
+                <span class="project-links"><a href="https://semver.org/" target="_blank" rel="noopener">semver.org</a></span>
+                . The convention is
+                MAJOR.MINOR.PATCH: bump PATCH for bug fixes, MINOR for new features that are
+                backwards compatible, and MAJOR for breaking changes. Following it matters even
+                on a solo project because it communicates intent to anyone installing or
+                automating updates.
+            </p>
+            <p>
+                However, there were two distribution problems I did not fully solve:
+            </p>
+            <ul>
+                <li>
+                    <strong>Windows executable signing</strong>. To avoid Windows SmartScreen
+                    warnings when users download the binary, you need a code-signing certificate
+                    issued by Microsoft. These cost roughly $200 to $400 per year. For a free open
+                    source tool, that is not a reasonable expense, so the binary ships unsigned.
+                    Users see a SmartScreen prompt on first run.
+                </li>
+                <li>
+                    <strong>apt repository</strong>. GoReleaser can produce a <code>.deb</code>
+                    package, which it does. But getting a package into a proper
+                    <code>apt</code> repository requires hosting a signed package repository and
+                    going through a non-trivial setup process.
+                </li>
+            </ul>
+
+            <h2>What I took away</h2>
+            <p>
+                Go is genuinely well-suited to this category of tool i.e. command-line utilities that
+                need to be small, fast, portable, and maintainable. The language's simplicity is
+                what I love about it most. It is what makes the code readable six months later.
+            </p>
+            <p>
+                The ecosystem around CLI development in Go is mature and thoughtfully designed.
+                Cobra, Viper, and Bubble Tea each solve their slice of the problem well.
+            </p>
+            <p>
+                Writing the code is just one half of the story. Distribution is the other.
+                Getting it to users safely, reliably, on three operating systems is probably the
+                tip of the iceberg of lot of the real engineering decisions 
+            </p>
+
+            <div>
+                <h1>Conclusion</h1>
+                <p>
+                    Working on this project has been fun, and it has made me want to build more CLI tools in the future.
+                </p>
+                <p>
+                    cheatcom is open source. If you spend time at a terminal and keep Googling the
+                    same commands.
+                    <span class="project-links">
+                        <a href="https://github.com/Eugene7997/cheatcom/releases" target="_blank" rel="noopener">give it a try</a>
+                    </span>
+                </p>
+            </div>
+
+        </section>
+    </main>
+    <main-footer></main-footer>
+
+</body>
+</html>

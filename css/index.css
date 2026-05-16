@@ -677,6 +677,11 @@ p {
     font-weight: bold;
 }
 
+.detail-body pre span {
+    text-decoration: none;
+    font-weight: inherit;
+}
+
 .project-actions {
     margin-top: 1rem;
 }
@@ -917,10 +922,18 @@ pre code {
     border-radius: 6px;
 }
 
-code {
+:not(pre) > code {
     color: rgb(255, 28, 65);
     padding: 0.15rem 0.4rem;
     line-height: 1.25;
+}
+
+pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1em;
 }
 
 pre {
